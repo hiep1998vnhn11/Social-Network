@@ -1,79 +1,274 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# This is Laravel Server
+All package for this server
+## JWT token 
+### Installation
+Install via composer
+Run the following command to pull in the latest version:
+```bash
+composer require tymon/jwt-auth
+```
+Add service provider ( Laravel 5.4 or below )
+Add the service provider to the providers array in the config/app.php config file as follows:
+```php
+'providers' => [
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+    ...
 
-## About Laravel
+    Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+]
+```
+Publish the config
+Run the following command to publish the package config file:
+```bash
+php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+```
+You should now have a config/jwt.php file that allows you to configure the basics of this package.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Generate secret key
+I have included a helper command to generate a key for you:
+```bash
+php artisan jwt:secret
+```
+This will update your .env file with something like JWT_SECRET=foobar
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+It is the key that will be used to sign your tokens. How that happens exactly will depend on the algorithm that you choose to use.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Quick start
+Update your User model
+Firstly you need to implement the Tymon\JWTAuth\Contracts\JWTSubject contract on your User model, which requires that you implement the 2 methods getJWTIdentifier() and getJWTCustomClaims().
 
-## Learning Laravel
+The example below should give you an idea of how this could look. Obviously you should make any changes, as necessary, to suit your own needs.
+```php
+<?php
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+namespace App;
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-## Laravel Sponsors
+class User extends Authenticatable implements JWTSubject
+{
+    use Notifiable;
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+    // Rest omitted for brevity
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
-- [云软科技](http://www.yunruan.ltd/)
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
 
-## Contributing
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+}
+```
+Configure Auth guard
+Note: This will only work if you are using Laravel 5.2 and above.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Inside the config/auth.php file you will need to make a few changes to configure Laravel to use the jwt guard to power your application authentication.
 
-## Code of Conduct
+Make the following changes to the file:
+```php
+'defaults' => [
+    'guard' => 'api',
+    'passwords' => 'users',
+],
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+...
 
-## Security Vulnerabilities
+'guards' => [
+    'api' => [
+        'driver' => 'jwt',
+        'provider' => 'users',
+    ],
+],
+```
+Here we are telling the api guard to use the jwt driver, and we are setting the api guard as the default.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+We can now use Laravel's built in Auth system, with jwt-auth doing the work behind the scenes!
 
-## License
+Add some basic authentication routes
+First let's add some routes in routes/api.php as follows:
+```php
+Route::group([
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    'middleware' => 'api',
+    'prefix' => 'auth'
+
+], function ($router) {
+
+    Route::post('login', 'AuthController@login');
+    Route::post('logout', 'AuthController@logout');
+    Route::post('refresh', 'AuthController@refresh');
+    Route::post('me', 'AuthController@me');
+
+});
+```
+Create the AuthController
+Then create the AuthController, either manually or by running the artisan command:
+
+php artisan make:controller AuthController
+Then add the following:
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+
+class AuthController extends Controller
+{
+    /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login']]);
+    }
+
+    /**
+     * Get a JWT via given credentials.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function login()
+    {
+        $credentials = request(['email', 'password']);
+
+        if (! $token = auth()->attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return $this->respondWithToken($token);
+    }
+
+    /**
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function me()
+    {
+        return response()->json(auth()->user());
+    }
+
+    /**
+     * Log the user out (Invalidate the token).
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout()
+    {
+        auth()->logout();
+
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    /**
+     * Refresh a token.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refresh()
+    {
+        return $this->respondWithToken(auth()->refresh());
+    }
+
+    /**
+     * Get the token array structure.
+     *
+     * @param  string $token
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60
+        ]);
+    }
+}
+```
+You should now be able to POST to the login endpoint (e.g. http://example.dev/auth/login) with some valid credentials and see a response like:
+```json
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ",
+    "token_type": "bearer",
+    "expires_in": 3600
+}
+```
+This token can then be used to make authenticated requests to your application.
+
+Authenticated requests
+There are a number of ways to send the token via http:
+
+Authorization header
+```json
+Authorization: Bearer eyJhbGciOiJIUzI1NiI...
+```
+Query string parameter
+
+http://example.dev/me?token=eyJhbGciOiJIUzI1NiI...
+
+Post parameter
+
+Cookies
+
+Laravel route parameter
+
+## Role and Permission
+https://docs.spatie.be/laravel-permission/v3/introduction/
+Consult the Prerequisites page for important considerations regarding your User models!
+
+This package publishes a config/permission.php file. If you already have a file by that name, you must rename or remove it.
+
+You can install the package via composer:
+```bash
+composer require spatie/laravel-permission
+```
+Optional: The service provider will automatically get registered. Or you may manually add the service provider in your config/app.php file:
+```php
+'providers' => [
+    // ...
+    Spatie\Permission\PermissionServiceProvider::class,
+];
+```
+You should publish the migration and the config/permission.php config file with:
+```bash
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+```
+NOTE: If you are using UUIDs, see the Advanced section of the docs on UUID steps, before you continue. It explains some changes you may want to make to the migrations and config file before continuing. It also mentions important considerations after extending this package’s models for UUID capability.
+
+Clear your config cache. This package requires access to the permission config. Generally it’s bad practice to do config-caching in a development environment. If you’ve been caching configurations locally, clear your config cache with either of these commands:
+```bash
+php artisan optimize:clear
+# or
+php artisan config:clear
+```
+Run the migrations: After the config and migration have been published and configured, you can create the tables for this package by running:
+```bash
+php artisan migrate
+```
+Add the necessary trait to your User model: Consult the Basic Usage section of the docs for how to get started using the features of this package.
+
+Default config file contents
+You can view the default config file contents at:
+
+https://github.com/spatie/laravel-permission/blob/master/config/permission.php
