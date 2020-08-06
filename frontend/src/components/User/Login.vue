@@ -1,23 +1,15 @@
 <template>
 <div>
     <v-container class="grey lighten-5">
-    <v-row
-      class="mb-6"
-      justify="center"
-      no-gutters
-    >
+        <v-col
+        md="6"
+        offset-md="3"
+      >
       <v-form
     ref="form"
     v-model="valid"
     lazy-validation
   >
-    <v-text-field
-      v-model="name"
-      :counter="10"
-      :rules="nameRules"
-      label="Name"
-      required
-    ></v-text-field>
 
     <v-text-field
       v-model="email"
@@ -28,15 +20,9 @@
 
     <v-text-field
       v-model="password"
-      :rules="emailRules"
+      type="password"
+      :rules="passwordRules"
       label="Password"
-      required
-    ></v-text-field>
-
-    <v-text-field
-      v-model="password_comfirm"
-      :rules="emailRules"
-      label="Confirm Password"
       required
     ></v-text-field>
 
@@ -48,36 +34,21 @@
     ></v-checkbox>
 
     <v-btn
-      color="error"
+      color="success"
       class="mr-4"
-      @click="reset"
+      @click="login"
     >
       Login
     </v-btn>
 
-    <v-btn
-      :disabled="!valid"
-      color="success"
-      class="mr-4"
-      @click="validate"
-    >
-      Validate
-    </v-btn>
 
-    <v-btn
-      color="warning"
-      @click="resetValidation"
-    >
-      Reset Validation
-    </v-btn>
-    
   </v-form>
-    </v-row>
     <v-row class="mb-6"
       justify="center"
       no-gutters>
     Don't have a acount? go to <router-link to="/register">Register now!</router-link>
     </v-row>
+        </v-col>
     </v-container>
   
 </div>
@@ -88,17 +59,13 @@
     data: () => ({
       valid: true,
       name: '',
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => (v && v.length <= 10) || 'Name must be less than 10 characters',
-      ],
       email: '',
       emailRules: [
         v => !!v || 'E-mail is required!',
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
       ],
       passwordRules: [
-          v=>!!v || 'Password os required!'
+          v=>!!v || 'Password is required!'
       ],
       select: null,
       items: [

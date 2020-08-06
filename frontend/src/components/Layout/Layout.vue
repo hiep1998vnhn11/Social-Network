@@ -35,7 +35,7 @@
         style="width: 300px"
         class="ml-0 pl-4"
       >
-        <span class="hidden-sm-and-down">Social Network</span>
+        <span to="/home" class="hidden-sm-and-down">Social Network</span>
       </v-toolbar-title>
       <v-text-field
         flat
@@ -82,6 +82,8 @@ export default {
                 { icon: 'mdi-account-outline', text: 'My Profile', link: '/user', auth: 'true' },
                 { icon: 'mdi-account-question', text: 'About This Application', link: '/about', auth: 'false' },
                 { icon: 'mdi-logout', text: 'Logout', link: '/loggout', auth: 'true' },
+                { icon: 'mdi-login', text: 'Login', link: '/login', auth: 'false'},
+                { icon: 'mdi-account-multiple-plus', text: 'Register', link: '/register', auth: 'false'},
             ],
             dialog: false,
             drawer: null,
