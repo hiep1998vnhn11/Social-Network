@@ -1,24 +1,20 @@
 # frontend
 
-## Project setup
+## How to build Project front-end with Vuetify
+### install Vue cli
 ```
-yarn install
+yarn global add @vue/cli @vue/cli-service-global
 ```
-
-### Compiles and hot-reloads for development
+### Create project
+```
+vue create frontend
+```
+### add Vuetify
+```
+cd frontend
+vue add vuetify
+```
+### start frontend
 ```
 yarn serve
 ```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
