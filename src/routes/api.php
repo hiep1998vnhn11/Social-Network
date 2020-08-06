@@ -17,3 +17,35 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'auth'
+
+], function ($router) {
+
+    Route::post('login', 'AuthController@login');
+    Route::post('logout', 'AuthController@logout');
+    Route::post('refresh', 'AuthController@refresh');
+    Route::post('me', 'AuthController@me');
+
+});
+
+Route::post('register', 'RegisterController@register');
+
+Route::group([
+    'middleware' => ['role:admin|super-admin'],
+    'prefix' => 'admin'
+], function($router){
+    Route::post('users', 'AdminController@index');
+    Route::post('show/{user}', 'AdminController@show');
+    Route::post('delete/{user}', 'AdminController@delete');
+    Route::post('create', 'AdminController@create');
+    Route::post('update/{user}', 'AdminController@update');
+    Route::group(['prefix' => 'todo'], function($router){
+        Route::post('get', 'TodoController@index');
+        Route::post('{user}/get', 'TodoController@get');
+        Route::post('delete/{todo}', 'TodoController@destroy');
+    });
+});
