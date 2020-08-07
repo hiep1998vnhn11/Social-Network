@@ -75,7 +75,7 @@ export default {
                 { icon: 'mdi-help-circle', text: 'Help', link: '/help', auth: 'false' },
                 { icon: 'mdi-account-outline', text: 'My Profile', link: '/user', auth: 'true' },
                 { icon: 'mdi-account-question', text: 'About This Application', link: '/about', auth: 'false' },
-                { icon: 'mdi-logout', text: 'Logout', link: '/loggout', auth: 'true' },
+                { icon: 'mdi-logout', text: 'Logout', link: '/logout', auth: 'true' },
                 { icon: 'mdi-login', text: 'Login', link: '/login', auth: 'false'},
                 { icon: 'mdi-account-multiple-plus', text: 'Register', link: '/register', auth: 'false'},
             ],

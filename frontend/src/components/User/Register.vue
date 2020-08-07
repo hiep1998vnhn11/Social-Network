@@ -50,7 +50,7 @@
     <v-btn
       color="error"
       class="mr-4"
-      @click="reset"
+      @click="register"
     >
       Register
     </v-btn>

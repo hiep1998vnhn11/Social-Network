@@ -55,14 +55,15 @@
 </template>
 
 <script>
+// import { mapActions } from 'vuex'
   export default {
     data: () => ({
       valid: true,
-      name: '',
       email: '',
+      password: '',
       emailRules: [
         v => !!v || 'E-mail is required!',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+        v => /.+@.+/.test(v) || 'E-mail must be valid',
       ],
       passwordRules: [
           v=>!!v || 'Password is required!'
@@ -78,15 +79,21 @@
     }),
 
     methods: {
-      validate () {
-        this.$refs.form.validate()
-      },
-      reset () {
-        this.$refs.form.reset()
-      },
-      resetValidation () {
-        this.$refs.form.resetValidation()
-      },
+      // ...mapActions(['login']),
+      login(){
+        this.$store.dispatch('login',
+         { email: this.email,
+          password: this.password
+         }
+        )
+        .then(() => {
+          this.$router.push('/profile')
+        })
+        .catch(error => {
+          alert('Loggin failed! Please try again!')
+          console.log(error)
+        })
+      }
     },
   }
 </script>

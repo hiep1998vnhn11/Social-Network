@@ -3,6 +3,7 @@
         "laravel",
         "spatie",
         "tymon",
-        "vuetify"
+        "vuetify",
+        "vuex"
     ]
 }

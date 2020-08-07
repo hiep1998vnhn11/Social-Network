@@ -59,6 +59,7 @@ const actions = {
     async deleteUser(context, idUser){
         context.state.setHeader()
         const deleteUserApi = await axios.post(`/admin/delete/${idUser}`)
+        console.log(deleteUserApi.data)
         context.commit('REMOVE_USER', idUser)
     },
 
