@@ -2,7 +2,7 @@
   <base-section id="about-our-product">
     <base-section-heading
       color="grey lighten-2"
-      icon="mdi-vuetify"
+      icon="mdi-hexagon-slice-2"
       title="About our Product"
     />
 
@@ -28,21 +28,21 @@
     data: () => ({
       cards: [
         {
-          title: 'Grow your Revenue',
-          subtitle: 'Best Productivity',
-          text: 'Similique sunt in culpa qui officia deserunt mollitia animi, id est laborut dolorum fuga.harum quidem rerum facilis estexpedita distinctio.',
+          title: 'Laravel and VueJs',
+          subtitle: 'My first product',
+          text: 'This website was build by Laravel server and VueJs frontend. If you want to study this Technology, should visit my github down this page!',
           callout: '01',
         },
         {
-          title: 'Affordable Prices',
-          subtitle: 'Special Offers',
-          text: 'Similique sunt in culpa qui officia deserunt mollitia animi, id est laborut dolorum fuga.harum quidem rerum facilis estexpedita distinctio.',
+          title: 'Social Network',
+          subtitle: 'Special',
+          text: 'I don\'t know I will do anything with this application, but first this is a Social Network for see feed, sent message and add friend!',
           callout: '02',
         },
         {
-          title: 'Target Setting',
-          subtitle: 'Income Flow',
-          text: 'Similique sunt in culpa qui officia deserunt mollitia animi, id est laborut dolorum fuga.harum quidem rerum facilis estexpedita distinctio.',
+          title: 'Thank you',
+          subtitle: 'Last',
+          text: 'Thank for your download or connect to my wevsite. All your actions and comments are my success in future! Thankyou! ',
           callout: '03',
         },
       ],

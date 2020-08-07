@@ -37,7 +37,7 @@
               cols="12"
               md="3"
             >
-              <instagram />
+              <facebook />
             </v-col>
           </v-row>
         </v-container>
@@ -52,7 +52,7 @@
 
     components: {
       InfoFeatures: () => import('@/components/InfoFeatures'),
-      Instagram: () => import('@/components/Instagram'),
+      Facebook: () => import('@/components/Facebook'),
     },
   }
 </script>

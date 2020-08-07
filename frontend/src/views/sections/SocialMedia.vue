@@ -11,9 +11,9 @@
 
       <base-section-heading
         color="transparent"
-        title="Social Media"
+        title="VueTify"
       >
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Excepturi aspernatur recusandae aut repudiandae illo error obcaecati dolores voluptate, tempore.
+        Vuetify is very useful, if you want to learn about it:
       </base-section-heading>
 
       <a

@@ -10,7 +10,7 @@
           md="5"
         >
           <base-business-info title="KEEP IN TOUCH WITH US">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Illo pariatur quidem, quis modi iure nihil commodi suscipit, corporis dicta adipisci, voluptatum quia cupiditate.
+          If you want to sent an email to me, have any problem with my app, or have an idea to develop my app, please following:
           </base-business-info>
         </v-col>
 

@@ -1,7 +1,7 @@
 <template>
-  <base-section id="theme-features">
-    <base-section-heading title="Theme Features">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, in! Asperiores, impedit libero. Veniam rerum saepe unde nihil possimus quibusdam esse accusamus mollitia magni fuga.
+  <base-section id="app-features">
+    <base-section-heading title="App Features">
+    I have not thought of my application name yet. But i think Social Network is nice, so this was Social Network (haha). I hope this will help me much in my graduation thesis next year (think so)!
     </base-section-heading>
 
     <v-container>
@@ -17,7 +17,7 @@
             align="left"
             horizontal
           >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis illum veniam cum dolores ratione commodi beatae quas maxime, laboriosam excepturi solut!
+            About my Project Features
           </base-avatar-card>
         </v-col>
       </v-row>
@@ -32,17 +32,17 @@
     data: () => ({
       features: [
         {
-          title: 'Pixel Perfect Design',
+          title: 'Perfect to share',
           icon: 'mdi-fountain-pen-tip',
         },
         {
-          title: 'Retina Ready',
+          title: 'Including smartphone',
           icon: 'mdi-cellphone',
         },
         {
           color: 'primary',
           dark: true,
-          title: 'Easily Customizable',
+          title: 'Easily Upload and Write',
           icon: 'mdi-pencil-box-outline',
         },
         {
@@ -50,7 +50,7 @@
           icon: 'mdi-image-size-select-actual',
         },
         {
-          title: 'Seo Optimized',
+          title: 'Amazing',
           icon: 'mdi-ice-pop',
         },
         {

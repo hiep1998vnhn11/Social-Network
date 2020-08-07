@@ -46,24 +46,18 @@
         class="hidden-sm-and-down"
       ></v-text-field>
       <v-spacer></v-spacer>
-      <v-btn icon>
+      <v-btn icon to="/setting">
         <v-icon>mdi-apps</v-icon>
       </v-btn>
-      <v-btn icon>
+      <v-btn icon to="/notification">
         <v-icon>mdi-bell</v-icon>
       </v-btn>
       <v-btn
+        to="/"
         icon
         large
       >
-        <v-avatar
-          size="32px"
-          item
-        >
-          <v-img
-            src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
-            alt="Vuetify"
-          ></v-img></v-avatar>
+       <v-icon>mdi-hexagon-slice-2</v-icon>
       </v-btn>
     </v-app-bar>
 </div>
