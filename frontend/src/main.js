@@ -11,7 +11,7 @@ import './plugins'
 Vue.config.productionTip = false
 Vue.use(Cookies)
 
-axios.defaults.baseURL = 'http://localhost:8000/api'
+axios.defaults.baseURL = 'http://hieptran.sotatek.api.com/api'
 
 router.beforeEach((to, from, next) => {
   if(to.matched.some(record => record.meta.requiresAuth)){

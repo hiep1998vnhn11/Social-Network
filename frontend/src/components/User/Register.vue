@@ -13,7 +13,7 @@
   >
     <v-text-field
       v-model="name"
-      :counter="10"
+      :counter="20"
       :rules="nameRules"
       label="Name"
       required
@@ -28,24 +28,19 @@
 
     <v-text-field
       v-model="password"
-      :rules="emailRules"
+      type="password"
+      :rules="passwordRules"
       label="Password"
       required
     ></v-text-field>
 
     <v-text-field
-      v-model="password_comfirm"
-      :rules="emailRules"
+      v-model="password_confirm"
+      :rules="confirmPasswordRules"
       label="Confirm Password"
+      type="password"
       required
     ></v-text-field>
-
-    <v-checkbox
-      v-model="checkbox"
-      :rules="[v => !!v || 'You must agree to continue!']"
-      label="Remember me"
-      required
-    ></v-checkbox>
 
     <v-btn
       color="error"
@@ -88,17 +83,22 @@
     data: () => ({
       valid: true,
       name: '',
+      password: '',
+      password_confirm: '',
       nameRules: [
         v => !!v || 'Name is required',
-        v => (v && v.length <= 10) || 'Name must be less than 10 characters',
+        v => (v && v.length <= 20) || 'Name must be less than 10 characters',
       ],
       email: '',
       emailRules: [
         v => !!v || 'E-mail is required!',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+        v => /.+@.+/.test(v) || 'E-mail must be valid',
       ],
       passwordRules: [
-          v=>!!v || 'Password os required!'
+        v => !!v || 'Password is required!'
+      ],
+      confirmPasswordRules: [
+        v => !!v || 'Confirm password is required!',
       ],
       select: null,
       items: [
@@ -107,15 +107,26 @@
         'Item 3',
         'Item 4',
       ],
-      checkbox: false,
     }),
 
     methods: {
       validate () {
         this.$refs.form.validate()
       },
-      reset () {
-        this.$refs.form.reset()
+      register () {
+        this.$store.dispatch('register', {
+          name: this.name,
+          email: this.email,
+          password: this.password
+        })
+        .then (() => {
+          alert('Register Successfully with email:' + this.email)
+          this.$router.push({name: 'Login'})
+        })
+        .catch( error => {
+          alert('Register fail!')
+          console.log(error)
+        })
       },
       resetValidation () {
         this.$refs.form.resetValidation()
