@@ -1,7 +1,5 @@
 <template>
   <base-section id="404">
-    <base-heading title="404" />
-
     <base-subheading
       class="primary--text"
       title="Oh!"
@@ -11,18 +9,22 @@
       space="8"
       title="Looks like this page doesn't exist"
     />
+    <base-subheading
+      space="8"
+      title="Or this page is in development phase"
+    />
 
     <base-img
-      :src="require('@/assets/logo.svg')"
+      :src="require('@/assets/404-Pages.jpg')"
       class="mx-auto mb-12"
       contain
-      height="350"
-      width="250"
+      height="250"
+      width="400"
     />
 
     <div class="text-center">
       <base-btn :to="{ name: 'Home' }">
-        Get me Out of Here
+        Go back to Home page
       </base-btn>
     </div>
   </base-section>

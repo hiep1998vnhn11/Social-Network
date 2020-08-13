@@ -7,19 +7,13 @@
 
   export default {
     name: 'FourOhFour',
-
-    metaInfo: { title: 'Oops! No Page Found' },
-
+    metaInfo: { title: 'Oops! 404' },
     extends: View,
-
     mixins: [
       LoadSections([
         '404',
-        'newsletter',
-        'info-alt',
       ]),
     ],
-
     props: {
       id: {
         type: String,

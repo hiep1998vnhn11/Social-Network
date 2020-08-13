@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
+use App\Post;
+use App\User;
 
 class PostController extends Controller
 {
@@ -11,9 +14,15 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+    public function __construct(){
+        $this->middleware('auth:api', ['except' => ['login']]);
+    }
+
+
+    public function get()
     {
-        //
+        return $this->respondWithPostByUserId(auth()->user()->id);
     }
 
     /**
@@ -21,9 +30,16 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(PostRequest $request)
     {
-        //
+        $post = new Post;
+        $post->content = $request->content;
+        $post->visible = $request->visible;
+        $post->user_id = auth()->user()->id;
+        $post->save();
+        return response()->json([
+            'success' => 'Create Post successfully!'
+        ]);
     }
 
     /**
@@ -43,9 +59,8 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
     }
 
     /**
@@ -66,9 +81,14 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, Post $post)
     {
-        //
+        if($post->user_id != auth()->user()->id)
+            return response()->json(['error' => 'Can not edit post of other user!']);
+        $post->content = $request->content;
+        $post->visible = $request->visible;
+        $post->save();
+        return response()->json(['success' => 'Update Post successfully!']);
     }
 
     /**
@@ -77,8 +97,21 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return response()->json([
+            'success' => 'Delete Post successfully!'
+        ]);
+    }
+
+    public function getPostByUserId($id){
+        return response()->json(
+            Post::orderBy('created_at', 'desc')->where('user_id', $id)->get()
+        );
+    }
+
+    protected function respondWithPostByUserId($id){
+        return response()->json(Post::orderBy('created_at', 'desc')->where('user_id', $id)->get());
     }
 }

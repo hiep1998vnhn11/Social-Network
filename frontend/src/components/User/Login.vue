@@ -57,6 +57,7 @@
 <script>
 // import { mapActions } from 'vuex'
   export default {
+    metaInfo: { title: 'Login' },
     data: () => ({
       valid: true,
       email: '',
@@ -81,6 +82,11 @@
     methods: {
       // ...mapActions(['login']),
       login(){
+        if(!this.email){
+          alert('Please enter an email!')
+        } else if(!this.password){
+          alert('Please enter password!')
+        } else {
         this.$store.dispatch('login',
          { email: this.email,
           password: this.password
@@ -89,10 +95,7 @@
         .then(() => {
           this.$router.push('/profile')
         })
-        .catch(error => {
-          alert('Loggin failed! Please try again!')
-          console.log(error)
-        })
+       }
       }
     },
   }

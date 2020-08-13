@@ -47,37 +47,34 @@
         class="hidden-sm-and-down"
       ></v-text-field>
       <v-spacer></v-spacer>
-      <v-tooltip bottom>
+      <v-tooltip bottom v-if="isLogin">
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             icon
             v-bind="attrs"
             v-on="on"
-            v-if="isLogin"
             to="/logout"
           ><v-icon>mdi-logout</v-icon></v-btn>
         </template>
         <span>Logout</span>
       </v-tooltip>
-      <v-tooltip bottom>
+      <v-tooltip bottom v-if="!isLogin">
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             icon
             v-bind="attrs"
             v-on="on"
-            v-if="!isLogin"
             to="/login"
           ><v-icon>mdi-login</v-icon></v-btn>
         </template>
         <span>Login</span>
       </v-tooltip>
-      <v-tooltip bottom>
+      <v-tooltip bottom v-if="!isLogin">
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             icon
             v-bind="attrs"
             v-on="on"
-            v-if="!isLogin"
             to="/register"
           ><v-icon>mdi-account-multiple-plus</v-icon></v-btn>
         </template>
@@ -89,7 +86,7 @@
             icon
             v-bind="attrs"
             v-on="on"
-            to="/apps"
+            to="/"
           ><v-icon>mdi-apps</v-icon></v-btn>
         </template>
         <span>Go to App</span>
@@ -111,7 +108,8 @@
             icon
             v-bind="attrs"
             v-on="on"
-            to="/"
+            large
+            to="/home"
           ><v-icon>mdi-hexagon-slice-2</v-icon></v-btn>
         </template>
         <span>Go to Home</span>
@@ -130,7 +128,7 @@ export default {
                 { icon: 'mdi-cog', text: 'Settings', link: '/setting', auth: 'false' },
                 { icon: 'mdi-message', text: 'Message', link: '/message', auth: 'true' },
                 { icon: 'mdi-help-circle', text: 'Help', link: '/help', auth: 'false' },
-                { icon: 'mdi-account-outline', text: 'My Profile', link: '/user', auth: 'true' },
+                { icon: 'mdi-account-outline', text: 'My Profile', link: '/profile', auth: 'true' },
                 { icon: 'mdi-account-question', text: 'About This Application', link: '/about', auth: 'false' },
             ],
             dialog: false,
@@ -139,7 +137,7 @@ export default {
     },
     computed: {
       isLogin(){
-        return this.$store.getters.loggedIn
+        return(this.$store.getters.currentUser) 
       }
     }
 }

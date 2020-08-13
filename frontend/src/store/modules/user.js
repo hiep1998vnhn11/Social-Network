@@ -41,9 +41,8 @@ const actions = {
             Cookies.set('access_token', token)
             context.commit('RETRIEVE_TOKEN', token) 
             context.commit('SET_CURRENT_USER', UserApi.data)
-            console.trace('hello')
         } catch(err){
-            console.log(err)
+            alert('Email and Password you entered did not match our record! Please check and try again!')
         }
     },
 

@@ -9,7 +9,7 @@
   export default {
     name: 'Home',
 
-    metaInfo: { title: 'Home' },
+    metaInfo: { title: 'App' },
 
     extends: View,
 
@@ -23,7 +23,6 @@
         'social-media',
         'keep-in-touch',
         'newsletter',
-        'pro-features',
         'info',
       ]),
     ],

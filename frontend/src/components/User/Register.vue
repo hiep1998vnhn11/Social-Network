@@ -80,6 +80,7 @@
 
 <script>
   export default {
+    metaInfo: { title: 'Register' },
     data: () => ({
       valid: true,
       name: '',
@@ -114,19 +115,24 @@
         this.$refs.form.validate()
       },
       register () {
+        if( !this.email || !this.password || !this.name || !this.password_confirm){
+          alert('Please enter all required input!')
+        } else if(this.password !== this.password_confirm){
+          alert('Password comfirm is different from password! please enter the same password and password comfirm!')
+        } else {
         this.$store.dispatch('register', {
           name: this.name,
           email: this.email,
           password: this.password
         })
         .then (() => {
-          alert('Register Successfully with email:' + this.email)
+          alert('Register Successfully with email: ' + this.email + '. To ensure a secure connection, please login!')
           this.$router.push({name: 'Login'})
         })
-        .catch( error => {
-          alert('Register fail!')
-          console.log(error)
+        .catch( () => {
+          alert('Register fail! The email was invalid in our record! Please choose another Email!')
         })
+        }
       },
       resetValidation () {
         this.$refs.form.resetValidation()
