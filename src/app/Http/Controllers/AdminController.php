@@ -98,8 +98,4 @@ class AdminController extends Controller
             'user' => $user
         ]);
     }
-
-    public function viewLogin(){
-        return view('auth.login');
-    }
 }

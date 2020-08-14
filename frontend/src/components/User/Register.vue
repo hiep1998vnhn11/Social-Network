@@ -123,7 +123,8 @@
         this.$store.dispatch('register', {
           name: this.name,
           email: this.email,
-          password: this.password
+          password: this.password,
+          password_confirmation: this.password_confirm
         })
         .then (() => {
           alert('Register Successfully with email: ' + this.email + '. To ensure a secure connection, please login!')

@@ -6,7 +6,7 @@ const state = {
     currentUser: null,
     token: Cookies.get('access_token') || null,
     setHeader(){
-        axios.defaults.headers.common['Authorization'] = 'Bearer' + Cookies.get('access_token')
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + Cookies.get('access_token')
     }
 }
 
@@ -26,7 +26,7 @@ const actions = {
     },
     async getCurrentUser(context){
         context.state.setHeader()
-        const currentUserApi = await axios.post('/auth/me')
+        const currentUserApi = await axios.get('/user')
         context.commit('SET_CURRENT_USER', currentUserApi.data)
     },
     async login(context, user){
@@ -36,8 +36,8 @@ const actions = {
                 password: user.password
             })
             const token = auth.data.access_token
-            axios.defaults.headers.common['Authorization'] = 'Bearer' + token
-            const UserApi = await axios.post('/auth/me')
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+            const UserApi = await axios.get('/user')
             Cookies.set('access_token', token)
             context.commit('RETRIEVE_TOKEN', token) 
             context.commit('SET_CURRENT_USER', UserApi.data)
@@ -47,10 +47,11 @@ const actions = {
     },
 
     async register(context, data){
-        const authRegister = await axios.post('register', {
+        const authRegister = await axios.post('/auth/signup', {
             name: data.name,
             email: data.email,
-            password: data.password
+            password: data.password,
+            password_confirmation: data.password_confirmation
         })
         console.log(authRegister)
     },
