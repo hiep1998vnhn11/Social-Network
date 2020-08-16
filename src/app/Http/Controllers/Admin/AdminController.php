@@ -1,26 +1,31 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\RegisterRequest;
 use Spatie\Permission\Models\Role;
+use App\Http\Controllers\AppBaseController;
+use App\Http\Services\UserService;
 
-class AdminController extends Controller
+class AdminController extends AppBaseController
 {
+    private $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
      /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
-        foreach($users as $user){
-            $user->getRoleNames();
-        }
-        return response()->json($users);
+        $data = $this->userService->getUserForAdmin($request->all());
+        return $this->sendResponse($data);
     }
 
     
@@ -39,10 +44,7 @@ class AdminController extends Controller
         $user->password = bcrypt($request->password);
         $user->assignRole($role);
         $user->save();
-        return response()->json([
-            'message' => 'Create user success!',
-            'user' => $user
-        ]);
+        return $this->sendResponse($user);
     }
     /**
      * Display the specified resource.

@@ -1,0 +1,48 @@
+{
+    "common": {
+      "select_lang": "Language",
+      "login": "Login",
+      "logout": "Logout",
+      "password": "Password",
+      "register": "Register",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "admin": "Admin",
+      "user": "User",
+      "go_home": "Go to home"
+
+    },
+    
+    "user": {
+      "message": {
+        "require": {
+          "email": "Email is required",
+          "name": "Name is required",
+          "password": "Password is required",
+          "password_confirm": "Confirm password is required",
+          "confirm_password": "Confirm password failed! Please certain that password is confirm!",
+          "all": "Please enter all required input"
+        },
+
+        "login":{
+          "success": "Login Successfully!",
+          "wrong": "Email and password you entered did not match our record! Please check and try again!",
+          "fail": "Sorry, Some thing went wrong! Please try again!"
+        },
+
+        "register":{
+          "success": "Register successfully! To ensure secure connection, please login",
+          "email_fail": "Register failed! This email was invalid in our record! Please choose another email",
+          "fail": "Sorry, Some thing went wrong! Please try again!"
+        }
+      }
+    },
+    
+    "admin": {
+      "message": {
+        "create_confirm": ""
+      }
+
+    }
+  }

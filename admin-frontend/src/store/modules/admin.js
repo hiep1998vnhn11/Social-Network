@@ -3,7 +3,6 @@ import Cookies from 'js-cookie'
 
 const state = {
     users: [],
-    currentUser: null,
     token: Cookies.get('access_token') || null,
     setHeader(){
         axios.defaults.headers.common['Authorization'] = 'Bearer' + Cookies.get('access_token')
@@ -24,11 +23,6 @@ const actions = {
         const response = await axios.post('/admin/users');
         context.commit('SET_USER', response.data)
     },
-    async getCurrentUser(context){
-        context.state.setHeader()
-        const currentUserApi = await axios.post('/auth/me')
-        context.commit('SET_CURRENT_USER', currentUserApi.data)
-    },
     async login(context, user){
         try{
             const auth = await axios.post('/auth/login', {
@@ -37,23 +31,13 @@ const actions = {
             })
             const token = auth.data.access_token
             axios.defaults.headers.common['Authorization'] = 'Bearer' + token
-            const UserApi = await axios.post('/auth/me')
+            const UserApi = await axios.get('/user')
             Cookies.set('access_token', token)
             context.commit('RETRIEVE_TOKEN', token) 
             context.commit('SET_CURRENT_USER', UserApi.data)
         } catch(err){
             alert('Email and Password you entered did not match our record! Please check and try again!')
         }
-    },
-
-    async register(context, data){
-        const authRegister = await axios.post('/register', {
-            name: data.name,
-            email: data.email,
-            password: data.password,
-            password_confirmation: data.password_confirmation
-        })
-        console.log(authRegister)
     },
 
     async deleteUser(context, idUser){
@@ -67,7 +51,7 @@ const actions = {
         context.state.setHeader()
         if(context.getters.loggedIn){
             return new Promise((resolve, reject) => {
-                axios.post('/auth/logout')
+                axios.get('/auth/logout')
                 .then(response => {
                     Cookies.remove('access_token')
                     context.commit('DESTROY_TOKEN')
@@ -87,7 +71,6 @@ const actions = {
 }
 
 const mutations = {
-    SET_CURRENT_USER: (state, currentUser) => state.currentUser = currentUser,
     RETRIEVE_TOKEN: (state, token) => state.token = token,
     DESTROY_TOKEN: (state) => {
         state.token = null,

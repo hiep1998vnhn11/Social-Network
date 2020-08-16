@@ -1,0 +1,47 @@
+{
+    "common": {
+      "select_lang": "Ngôn ngữ",
+      "login": "Đăng nhập",
+      "logout": "Đăng xuất",
+      "password": "Mật khẩu",
+      "register": "Đăng ký",
+      "cancel": "Huỷ bỏ",
+      "edit": "Sửa",
+      "delete": "Xoá",
+      "admin": "Quản trị viên",
+      "user": "Người dùng",
+      "go_home": "Đến trang chủ"
+    },
+    
+    "user": {
+      "message": {
+        "require": {
+          "email": "Hãy nhập email",
+          "name": "Hãy nhập tên",
+          "password": "Hãy nhâp mật khẩu",
+          "password_confirm": "Hãy nhập xác nhận mật khẩu",
+          "confirm_password": "Xác nhận mật khẩu thất bại. Hãy kiểm tra và thử lại!",
+          "all": "Hãy điền đẩy đủ thông tin"
+        },
+
+        "login":{
+          "success": "Đăng nhập thành công!",
+          "wrong": "Email hoặc mật khẩu không đúng! Hãy kiểm tra và thử lại",
+          "fail": "Xin lỗi! Có điều gì đó không ổn, hãy thử lại sau"
+        },
+
+        "register":{
+          "success": "Đăng ký thành công! Để đảm bảo lần kết nối này được an toàn, hãy đăng nhập",
+          "email_fail": "Đăng ký thất bại! Email này đã được đăng ký, hãy dùng email khác và thử lại",
+          "fail": "Xin lỗi! Có điều gì đó không ổn, hãy thử lại sau"
+        }
+      }
+    },
+    
+    "admin": {
+      "message": {
+        "create_confirm": ""
+      }
+
+    }
+  }

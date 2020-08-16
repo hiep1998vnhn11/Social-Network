@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -30,4 +32,13 @@ Route::group([
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'AuthController@user');
     });
+});
+
+//Admin
+
+Route::group([
+    'prefix' => 'admin',
+    'middleware' => 'role:admin'
+], function () {
+    Route::get('users', 'Admin\AdminController@index');
 });

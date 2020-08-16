@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
-class AuthController extends Controller
+class AuthController extends AppBaseController
 {
     /**
      * Create a new AuthController instance.
@@ -75,9 +75,11 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         return response()->json([
+            'success' => true,
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'current' => \Carbon\Carbon::now()->toDateTimeString()
         ]);
     }
 }

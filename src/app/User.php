@@ -44,6 +44,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany('App\Todo', 'user_id', 'id');
     }
 
+    public function post(){
+        return $this->hasMany('App\Post', 'user_id', 'id');
+    }
     public function getJWTIdentifier()
     {
         return $this->getKey();

@@ -3,13 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --port=3001",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
+    "js-cookie": "^2.2.1",
+    "js-cookies": "^1.0.4",
     "lodash": "^4.17.20",
     "vue": "^2.6.11",
     "vue-i18n": "^8.21.0",

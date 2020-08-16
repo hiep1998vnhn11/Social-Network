@@ -61,6 +61,7 @@ class SSeeder extends Seeder
              'name' => 'admin',
              'email' => 'admin@admin',
              'password' => bcrypt('admin'),
+             'role' => 'admin'
          ]);
          $user->assignRole($role2);
  
@@ -68,6 +69,7 @@ class SSeeder extends Seeder
              'name' => 'super-admin',
              'email' => 'superadmin@admin',
              'password' => bcrypt('admin'),
+             'role' => 'super-admin'
          ]);
          $user->assignRole($role3);
  
@@ -75,6 +77,7 @@ class SSeeder extends Seeder
              'name' => 'blocked',
              'email' => 'blocked@gmail.com',
              'password' => bcrypt('123456'),
+             'role' => 'blocked'
          ]);
          $user->assignRole($role4);
     }
