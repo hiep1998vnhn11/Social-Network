@@ -18,7 +18,8 @@ class CreatePostsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->text('content');
             $table->string('imageUrl');
-            $table->enum('visible', ['public', 'friend']);
+            $table->enum('visible', ['public', 'friend', 'private', 'blocked']);
+            $table->bigInteger('likes')->default(0);
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');

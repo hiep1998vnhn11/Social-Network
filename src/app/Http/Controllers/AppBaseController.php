@@ -38,4 +38,24 @@ class AppBaseController extends Controller
 
         return response()->json($res, $code);
     }
+
+    public function sendMessageSuccess($result, $message)
+    {
+        $res = [
+            'success' => true,
+            'message' => $message,
+            'current' => \Carbon\Carbon::now()->toDateTimeString(),
+            'data' => $result
+        ];
+        return response()->json($res);
+    }
+
+    public function sendMessageFail($message, $code = 400)
+    {
+        $res = [
+            'success' => false,
+            'message' => $message
+        ];
+        return response()->json($res, $code);
+    }
 }

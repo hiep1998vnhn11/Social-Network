@@ -8,6 +8,7 @@ use App\Http\Requests\RegisterRequest;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Services\UserService;
+use Illuminate\Support\Str;
 
 class AdminController extends AppBaseController
 {
@@ -22,7 +23,7 @@ class AdminController extends AppBaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function getUser(Request $request)
     {
         $data = $this->userService->getUserForAdmin($request->all());
         return $this->sendResponse($data);
@@ -72,15 +73,22 @@ class AdminController extends AppBaseController
      */
     public function update(RegisterRequest $request, User $user)
     {
-        $role = Role::findById(1);
         if($request->email) return response()->json([
-            'error' => 'Can not edit Email!'
-        ]);
+            'success' => false,
+            'message' => 'Can not edit Email!'
+        ], 400);
+        if(Str::contains($request->name, 'admin')) return response()->json([
+            'success' => false,
+            'message' => 'name can not contain \'admin\' string'
+        ], 400);
+
+        $role = Role::findById(1);
         $user->name = $request->name;
         $user->password = bcrypt($request->password);
         $user->assignRole($role);
         $user->save();
         return response()->json([
+            'success' => true,
             'message' => 'Update user success!',
             'user' => $user
         ]);
@@ -96,6 +104,7 @@ class AdminController extends AppBaseController
     {
         $user->delete();
         return response()->json([
+            'success' => true,
             'message' => 'Delete user success!',
             'user' => $user
         ]);
