@@ -11,15 +11,61 @@ use Illuminate\Support\Arr;
 use App\Post;
 use App\Consts;
 use App\Like;
-
+use Illuminate\Support\Facades\DB;
 class PostService {
+
+    public function get($param){
+        $limit = Arr::get($param, 'limit', Consts::DEFAULT_PER_PAGE);
+        $userID = Arr::get($param, 'user_id', null);
+        $searchKey = Arr::get($param, 'search_key', null);
+        $visible = Arr::get($param, 'visible', 'public');
+
+        $query = Post::join('users', 'posts.user_id', 'users.id')
+            ->select('posts.id', 'posts.user_id','users.name as user_name', 'posts.content', 'posts.imageUrl', 'posts.visible', 'posts.created_at');
+        if($userID){
+            $query = $query->where('posts.user_id', $userID);
+        }
+
+        if($visible){
+            $query = $query->where('posts.visible', $visible);
+        }
+
+
+        if($searchKey){
+            $query = $query->where(function ($q) use ($searchKey){
+                $q->where('posts.content', 'like', '%' . $searchKey . '%')
+                  ->orWhere('users.name', 'like', '%' . $searchKey . '%');
+            });
+        }
+
+        $posts = $query->orderBy('posts.created_at')->paginate($limit);
+        foreach($posts as $post){
+            $likes = Like::join('users', 'likes.user_id', 'users.id')
+                ->select('users.url', 'users.name as user_name', 'likes.created_at')
+                ->where('likes.post_id', $post->id)
+                ->where('likes.status', 1)
+                ->orderBy('likes.created_at')
+                ->get();
+            $comment = Comment::join('users', 'comments.user_id', 'users.id')
+                ->select('users.url', 'users.name as user_name', 'comments.content', 'comments.created_at')
+                ->where('comments.post_id', $post->id)
+                ->orderBy('comments.created_at')
+                ->get();
+            Arr::add($post, 'like_count', count($likes));
+            Arr::add($post, 'comment_count', count($comment));
+            Arr::add($post, 'likes', $likes);
+            Arr::add($post, 'comments', $comment);
+        }
+        return $posts;
+        
+    }
     
     public function getPostForUser($param){
         $limit = Arr::get($param, 'limit', Consts::DEFAULT_PER_PAGE);
         $searchKey = Arr::get($param, 'search_key', null);
         $visible = Arr::get($param, 'visible', null);
         $query = Post::select('posts.content', 'posts.likes','posts.imageUrl', 'posts.visible', 'posts.created_at')
-            ->where('posts.user_id', 'like', auth()->user()->id);
+            ->where('posts.user_id', auth()->user()->id);
         if($searchKey){
             $query = $query->where(function ($q) use ($searchKey){
                 $q->where('posts.content', 'like', '%' . $searchKey . '%');
@@ -104,6 +150,26 @@ class PostService {
         return $posts;
     }
 
+    public function getPostByUserId($param, $userID){
+        if($userID == auth()->user()->id) return $this->getPostForUser($param);
+        $limit = Arr::get($param, 'limit', Consts::DEFAULT_PER_PAGE);
+        $searchKey = Arr::get($param, 'search_key', null);
+
+        $query = Post::select('posts.content', 'posts.likes', 'post.imageUrl', 'posts.visible', 'posts.created_at')
+            ->where('posts.user_id', $userID)
+            ->where('posts.visible', 'public');
+        
+        if($searchKey){
+            $query = $query->where('posts.content', 'like', '%' . $searchKey . '%')
+                ->orWhere('posts.created_at', 'like', '%' . $searchKey . '%')
+                ->orWhere('posts.likes', 'like', '%' . $searchKey . '%');
+        }
+
+        $posts = $query->orderBy('created_at')->paginate($limit);
+        return $posts;
+    }
+
+
     public function getLike($param, $postID){
         $limit = Arr::get($param, 'limit', Consts::DEFAULT_PER_PAGE);
         $searchKey = Arr::get($param, 'search_key', null);
@@ -115,8 +181,7 @@ class PostService {
         if($searchKey){
             $query = $query->where('users_name', 'like', '%'.$searchKey.'%');
         }
-        $likes = $query->select('posts.id as post_id', 'users.id as user_id', 'likes.id', 'users.name as user_name')->paginate($limit);
-
+        $likes = $query->select('posts.id as post_id', 'users.id as user_id', 'likes.id', 'users.name as user_name', 'likes.status')->paginate($limit);
         return $likes;
     }
 
@@ -125,7 +190,7 @@ class PostService {
         $searchKey = Arr::get($param, 'search_key', null);
 
         $query = Comment::join('posts',  'comments.post_id', 'posts.id')
-          ->leftJoin('users', 'comments.user_id', 'users.id')
+          ->join('users', 'comments.user_id', 'users.id')
           ->where('comments.post_id', $postID);
 
         if($searchKey){

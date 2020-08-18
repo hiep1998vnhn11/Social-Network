@@ -29,14 +29,6 @@ Route::group([
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
-    //Post
-    Route::group([ 
-        'prefix' => 'post',
-        'middleware' => 'role:viewer'
-    ], function (){
-        
-        Route::post('get', 'PostController@get');
-    });
 
     //User
     Route::group([ 
@@ -44,9 +36,15 @@ Route::group([
         'middleware' => 'role:viewer|admin|super-admin'
     ], function (){
         Route::get('get', 'User\UserController@get');
+        Route::get('{user}/get_info', 'User\UserController@getInfoByUserId');
+        Route::get('{user}/get_post', 'User\PostController@getPostByUserId');
+        Route::get('{user}/get_message', 'User\MessageController@getMessageByUserId');
+
+        //group prefix post
         Route::group([
             'prefix' => 'post'
         ],function(){
+            Route::get('get', 'User\PostController@get');
             Route::get('get_for_user', 'User\PostController@getForUser');
             Route::get('get_for_feed', 'User\PostController@getForFeed');
             Route::get('get_for_friend', 'User\PostController@getForFriend');
@@ -70,6 +68,7 @@ Route::group([
 
             //resource sub comment
             Route::get('{post}/{comment}/get_sub-comment', 'User\SubCommentController@getSubComment');
+
         });
     });
 });

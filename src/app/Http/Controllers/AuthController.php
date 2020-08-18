@@ -26,7 +26,7 @@ class AuthController extends AppBaseController
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->setTTL(7200)->attempt($credentials)) {
+        if (! $token = auth()->setTTL(1800)->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 

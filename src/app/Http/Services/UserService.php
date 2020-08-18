@@ -59,4 +59,5 @@ class UserService {
         $users = $query->paginate($limit);
         return $users;
     }
+
 }

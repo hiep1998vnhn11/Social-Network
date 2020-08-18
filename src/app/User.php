@@ -40,14 +40,22 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-    public function post(){
+    public function posts(){
         return $this->hasMany('App\Post', 'user_id', 'id');
     }
 
-    public function like(){
+    public function likes(){
         return $this->hasMany('App\Like', 'user_id', 'id');
     }
-    
+
+    public function messagesSent(){
+        return $this->hasMany('App\Message', 'sent_id', 'id');
+    }
+
+    public function messagesReceived(){
+        return $this->hasMany('App\Message', 'received_id', 'id');
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();

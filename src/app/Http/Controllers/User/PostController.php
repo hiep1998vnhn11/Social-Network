@@ -24,6 +24,12 @@ class PostController extends AppBaseController
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function get(Request $request)
+    {
+        $data = $this->postService->get($request->all());
+        return $this->sendResponse($data);
+    }
     public function getForUser(Request $request)
     {
         $data = $this->postService->getPostForUser($request->all());
@@ -51,6 +57,12 @@ class PostController extends AppBaseController
     public function getForFeed(Request $request)
     {
         $data = $this->postService->getPostForFeed($request->all());
+        return $this->sendResponse($data);
+    }
+
+    public function getPostByUserId(Request $request, User $user)
+    {
+        $data = $this->postService->getPostByUserId($request->all(), $user->id);
         return $this->sendResponse($data);
     }
     /**

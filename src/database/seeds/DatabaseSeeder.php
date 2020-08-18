@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         //Hello cac
-        // $this->call(UserSeeder::class);
+        $this->call(SSeeder::class);
+        $this->call(UserSeeder::class);
     }
 }

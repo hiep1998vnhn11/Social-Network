@@ -16,8 +16,8 @@ class CreatePostsTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->text('content');
-            $table->string('imageUrl');
+            $table->text('content')->nullable();
+            $table->string('imageUrl')->nullable();
             $table->enum('visible', ['public', 'friend', 'private', 'blocked']);
             $table->bigInteger('likes')->default(0);
             $table->softDeletes();
