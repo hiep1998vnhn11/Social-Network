@@ -38,33 +38,4 @@ class UserController extends AppBaseController
         return $this->sendResponse($data);
     }
 
-    public function deletePost(Post $post)
-    {
-        $fail = 'Delete post permission denied!';
-        $success = 'Delete post successfully';
-        if(auth()->user()->id != $post->user_id){
-            return $this->sendMessageFail($fail);
-        }
-
-        $post->delete();
-        return $this->sendMessageSuccess($post,$success);
-    }
-
-    public function editPost(PostRequest $request, Post $post)
-    {
-        $fail = 'Edit post permission denied!';
-        $success = 'edit post successfully';
-
-        if(auth()->user()->id != $post->user_id){
-            return $this->sendMessageFail($fail);
-        }
-
-        $post->content = $request->content;
-        $post->imageUrl = $request->imageUrl;
-        $post->update_at = Carbon::now()->toDateTimeString();
-        $post->save();
-
-        return $this->sendMessageSuccess($post, $success);
-    }
-
 }

@@ -19,7 +19,7 @@ class CommentController extends AppBaseController
         $this->postService = $postService;
     }
     
-    public function createComment(CommentRequest $request,Post $post)
+    public function create(CommentRequest $request,Post $post)
     {
         $comment = new Comment();
         $comment->post_id = $post->id;
@@ -31,7 +31,32 @@ class CommentController extends AppBaseController
         return $this->sendMessageSuccess($comment, $success);
     }
 
-    public function getComment(Request $request,Post $post)
+    public function edit(CommentRequest $request, Comment $comment)
+    {
+        $fail = 'Edit comment fail!';
+        $success = 'Update comment successfully!';
+        if($comment->user_id != auth()->user()->id){
+            return $this->sendMessageFail($fail);
+        }
+
+        $comment->content = $request->content;
+        $comment->save();
+
+        return $this->sendMessageSuccess($comment, $success);
+    }
+
+    public function delete(Comment $comment)
+    {
+        $fail='Delete comment fail';
+        $success='Delete comment successfully';
+        if($comment->user_id != auth()->user()->id)
+            return $this->sendMessageFail($fail);
+
+        $comment->delete();
+        return $this->sendMessageSuccess($comment, $success);
+    }
+
+    public function get(Request $request,Post $post)
     {
         $data = $this->postService->getComment($request->all(), $post->id);
         return $this->sendResponse($data);

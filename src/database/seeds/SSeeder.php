@@ -54,12 +54,14 @@ class SSeeder extends Seeder
              'name' => 'hiep',
              'email' => 'hiep@gmail.com',
              'password' => bcrypt('123456'),
+             'url' => 'hiep'
          ]);
          $user->assignRole($role1);
  
          $user = Factory(App\User::class)->create([
              'name' => 'admin',
              'email' => 'admin@admin',
+             'url' => 'admin',
              'password' => bcrypt('admin'),
              'role' => 'admin'
          ]);
@@ -68,8 +70,9 @@ class SSeeder extends Seeder
          $user = Factory(App\User::class)->create([
              'name' => 'super-admin',
              'email' => 'superadmin@admin',
+             'url' => 'supper-admin',
              'password' => bcrypt('admin'),
-             'role' => 'super-admin'
+             'role' => 'super-admin',
          ]);
          $user->assignRole($role3);
  
@@ -77,7 +80,8 @@ class SSeeder extends Seeder
              'name' => 'blocked',
              'email' => 'blocked@gmail.com',
              'password' => bcrypt('123456'),
-             'role' => 'blocked'
+             'role' => 'blocked',
+             'url' => 'blocked'
          ]);
          $user->assignRole($role4);
     }

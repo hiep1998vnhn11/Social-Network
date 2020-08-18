@@ -53,17 +53,18 @@ Route::group([
 
             //resource Post
             Route::post('create', 'User\PostController@create');
-            Route::post('{post}/delete', 'User\UserController@deletePost');
-            Route::post('{post}/edit', 'User\UserController@editPost');
+            Route::post('{post}/delete', 'User\PostController@delete');
+            Route::post('{post}/edit', 'User\PostController@edit');
 
             //resource Like
             Route::get('{post}/get_like', 'User\LikeController@getLike');
-            Route::post('{post}/handle_like', 'User\LikeController@handleLike');
+            Route::post('{post}/handle_like', 'User\LikeController@like');
 
             //resource comment
-            Route::get('{post}/get_comment', 'User\CommentController@getComment');
-            Route::post('{post}/create_comment', 'User\CommentController@createComment');
-            Route::post('{post}/{comment}/delete', 'User\CommentController@deleteComment');
+            Route::get('{post}/get_comment', 'User\CommentController@get');
+            Route::post('{post}/create_comment', 'User\CommentController@create');
+            Route::post('{post}/{comment}/delete', 'User\CommentController@delete');
+            Route::post('{post}/{comment}/edit', 'User\CommentController@edit');
             
 
             //resource sub comment

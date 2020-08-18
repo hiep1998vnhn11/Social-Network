@@ -9,6 +9,7 @@ use App\Post;
 use App\Http\Services\PostService;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\PostRequest;
+use Illuminate\Support\Carbon;
 
 class PostController extends AppBaseController
 
@@ -79,66 +80,38 @@ class PostController extends AppBaseController
         $post->user_id = auth()->user()->id;
         $post->save();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Create post success!',
-            'data' => $post
-        ]);
+       $success = 'Create post successfully!';
+       return $this->sendMessageSuccess($post, $success);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function delete(Post $post)
     {
-        //
+        $fail = 'Delete post permission denied!';
+        $success = 'Delete post successfully';
+        if(auth()->user()->id != $post->user_id){
+            return $this->sendMessageFail($fail);
+        }
+
+        $post->delete();
+        return $this->sendMessageSuccess($post,$success);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function edit(PostRequest $request, Post $post)
     {
-        //
-    }
+        $fail = 'Edit post permission denied!';
+        $success = 'Edit post successfully';
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        if(auth()->user()->id != $post->user_id){
+            return $this->sendMessageFail($fail);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        $post->content = $request->content;
+        $post->imageUrl = $request->imageUrl;
+        if($request->visible)
+            $post->visible = $request->visible;
+        $post->update_at = Carbon::now()->toDateTimeString();
+        $post->save();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return $this->sendMessageSuccess($post, $success);
     }
 }

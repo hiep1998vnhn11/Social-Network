@@ -19,21 +19,31 @@ class LikeController extends AppBaseController
     {
         $this->postService = $postService;
     }
-    public function handleLike(Post $post)
+    public function like(Post $post)
     {
         $success = 'Handle like successfully!';
-        $fail = 'Handle like failed! You can only like one time!';
-        $likes = DB::table('likes')->where('user_id', auth()->user()->id)->value('user_id');
-        if($likes){
-            return $this->sendMessageFail($fail);
+
+        $isLiked = Like::where('user_id', auth()->user()->id)
+            ->where('post_id', $post->id)
+            ->first();
+        if($isLiked){
+            if($isLiked->status){ // liked and status = 1 => handleUnLike()
+                $isLiked->status = 0;
+                $isLiked->save();
+                return $this->sendMessageSuccess($isLiked, $success);
+            } 
+            else{ //liked and status = 0 => handleLike()
+                $isLiked->status = 1;
+                $isLiked->save();
+                return $this->sendMessageSuccess($isLiked, $success);
+            }
+        } else{ //hadn't liked =>create()
+            $like = new Like;
+            $like->user_id = auth()->user()->id;
+            $like->post_id = $post->id;
+            $like->save();
+            return $this->sendMessageSuccess($like, $success);
         }
-
-        $like = new Like;
-        $like->user_id = auth()->user()->id;
-        $like->post_id = $post->id;
-        $like->save();
-
-        return $this->sendMessageSuccess($like, $success);
     }
 
     public function getLike(Request $request, Post $post)
@@ -42,19 +52,4 @@ class LikeController extends AppBaseController
        return $this->sendResponse($data);
     }
 
-    public function handleUnlike(Like $like)
-    {
-        $success = 'Handle unlike successfully!';
-        $fail = 'Handle unlike failed! You do not like any time!';
-        $likes = DB::table('likes')->where('user_id', auth()->user()->id)->value('id');
-        if(!$likes){
-            return $this->sendMessageFail($fail);
-        }
-
-        if($like->user_id != auth()->user()->id){
-            return $this->sendMessageFail('You can unlike other user like!');
-        }
-
-        $like->delete();
-    }
 }
