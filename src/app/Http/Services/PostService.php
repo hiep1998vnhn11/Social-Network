@@ -11,6 +11,7 @@ use Illuminate\Support\Arr;
 use App\Post;
 use App\Consts;
 use App\Like;
+use App\Sub_Comment;
 use Illuminate\Support\Facades\DB;
 class PostService {
 
@@ -38,23 +39,35 @@ class PostService {
             });
         }
 
-        $posts = $query->orderBy('posts.created_at')->paginate($limit);
+        $posts = $query->orderBy('posts.created_at', 'desc')->paginate($limit);
+        $comment_count = 0;
         foreach($posts as $post){
             $likes = Like::join('users', 'likes.user_id', 'users.id')
                 ->select('users.url', 'users.name as user_name', 'likes.created_at')
                 ->where('likes.post_id', $post->id)
                 ->where('likes.status', 1)
-                ->orderBy('likes.created_at')
+                ->orderBy('likes.created_at', 'desc')
                 ->get();
-            $comment = Comment::join('users', 'comments.user_id', 'users.id')
+            $comments = Comment::join('users', 'comments.user_id', 'users.id')
                 ->select('users.url', 'users.name as user_name', 'comments.content', 'comments.created_at')
                 ->where('comments.post_id', $post->id)
-                ->orderBy('comments.created_at')
+                ->orderBy('comments.created_at', 'desc')
                 ->get();
+            $comment_count += count($comments);
+                foreach($comments as $comment){
+                    $sub_comment = Sub_Comment::join('users', 'sub_comments.user_id', 'users.id')
+                        ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'sub_comments.created_at')
+                        ->where('sub_comments.comment_id', $comment->id)
+                        ->orderBy('sub_comments.created_at', 'desc')
+                        ->get();
+                    Arr::add($comment, 'sub_comment_count', count($sub_comment));
+                    Arr::add($comment, 'sub_comments', $sub_comment);
+                    $comment_count += count($sub_comment);
+                }
             Arr::add($post, 'like_count', count($likes));
-            Arr::add($post, 'comment_count', count($comment));
+            Arr::add($post, 'comment_count', $comment_count);
             Arr::add($post, 'likes', $likes);
-            Arr::add($post, 'comments', $comment);
+            Arr::add($post, 'comments', $comments);
         }
         return $posts;
         
@@ -76,7 +89,7 @@ class PostService {
             $query = $query->where('posts.visible', $visible);
         }
        
-        $posts = $query->orderBy('created_at')->paginate($limit);
+        $posts = $query->orderBy('created_at', 'desc')->paginate($limit);
         return $posts;
     }
 
@@ -96,7 +109,7 @@ class PostService {
             $query = $query->where('posts.visible', 'like', $visible);
         }
        
-        $posts = $query->orderBy('created_at')->paginate($limit);
+        $posts = $query->orderBy('created_at', 'desc')->paginate($limit);
         return $posts;
     }
 
@@ -117,7 +130,7 @@ class PostService {
             });
         }
        
-        $posts = $query->orderBy('created_at')->paginate($limit);
+        $posts = $query->orderBy('created_at', 'desc')->paginate($limit);
         return $posts;
     }
 
@@ -136,7 +149,7 @@ class PostService {
                 $q->where('posts.content', 'like', '%' . $searchKey . '%');
             });
         }
-        $posts = $query->orderBy('created_at')->paginate($limit);
+        $posts = $query->orderBy('created_at', 'desc')->paginate($limit);
         return $posts;
     }
 
@@ -146,7 +159,7 @@ class PostService {
         ->where('posts.user_id', 'like', auth()->user()->id)
         ->orWhere('posts.visible', 'like', 'friend');
 
-        $posts = $query->orderBy('created_at')->paginate($limit);
+        $posts = $query->orderBy('created_at', 'desc')->paginate($limit);
         return $posts;
     }
 
@@ -165,7 +178,7 @@ class PostService {
                 ->orWhere('posts.likes', 'like', '%' . $searchKey . '%');
         }
 
-        $posts = $query->orderBy('created_at')->paginate($limit);
+        $posts = $query->orderBy('created_at', 'desc')->paginate($limit);
         return $posts;
     }
 
@@ -181,7 +194,9 @@ class PostService {
         if($searchKey){
             $query = $query->where('users_name', 'like', '%'.$searchKey.'%');
         }
-        $likes = $query->select('posts.id as post_id', 'users.id as user_id', 'likes.id', 'users.name as user_name', 'likes.status')->paginate($limit);
+        $likes = $query->select('posts.id as post_id', 'users.id as user_id', 'likes.id', 'users.name as user_name', 'likes.status')
+            ->orderBy('likes.created_at', 'desc')
+            ->paginate($limit);
         return $likes;
     }
 
@@ -198,7 +213,19 @@ class PostService {
               ->orWhere('comments.content', 'like', '%'.$searchKey.'%');
         }
 
-        $comments = $query->select('posts.id as post_id', 'users.id as user_id', 'users.name as user_name','comments.id', 'comments.content')->paginate($limit);
+        $comments = $query->select('posts.id as post_id', 'users.id as user_id', 'users.name as user_name','comments.id', 'comments.content')
+            ->orderBy('comments.created_at', 'desc')
+            ->paginate($limit);
+
+        foreach($comments as $comment){
+            $sub_comment = Sub_Comment::join('users', 'sub_comments.user_id', 'users.id')
+                ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'sub_comments.created_at')
+                ->where('sub_comments.comment_id', $comment->id)
+                ->orderBy('sub_comments.created_at', 'desc')
+                ->get();
+            Arr::add($comment, 'sub_comment_count', count($sub_comment));
+            Arr::add($comment, 'sub_comments', $sub_comment);
+        }
         return $comments;
     }
 

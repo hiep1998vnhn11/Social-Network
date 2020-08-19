@@ -56,6 +56,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany('App\Message', 'received_id', 'id');
     }
 
+    public function sub_comment(){
+        return $this->hasMany('App\Sub_Comment', 'user_id', 'id');
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
