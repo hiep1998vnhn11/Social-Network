@@ -40,5 +40,15 @@ class UserSeeder extends Seeder
                 'content' => Str::random(6) . ' ' . Str::random(5) . Str::random(6) . ' ' . Str::random(5)
             ]);
         };
+
+        for($j=1;$j<=10;$j++){
+            for($i=1;$i<=100;$i++){
+                App\Message::create([
+                    'sent_id' => $j,
+                    'received_id' => $j+1,
+                    'content' => Str::random(5)
+                ]);
+            }
+        }
     }
 }

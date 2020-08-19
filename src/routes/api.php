@@ -38,7 +38,13 @@ Route::group([
         Route::get('get', 'User\UserController@get');
         Route::get('{user}/get_info', 'User\UserController@getInfoByUserId');
         Route::get('{user}/get_post', 'User\PostController@getPostByUserId');
-        Route::get('{user}/get_message', 'User\MessageController@getMessageByUserId');
+
+           //resource Message
+        Route::post('{user}/send_message', 'User\MessageController@send');
+        Route::get('/get_message', 'User\MessageController@get');
+        Route::post('{user}/{message}/edit', 'User\MessageController@edit');
+        Route::delete('{user}/{message}/delete', 'User\MessageController@delete');
+        Route::get('/test_message', 'User\MessageController@test');
 
         //group prefix post
         Route::group([
@@ -53,8 +59,10 @@ Route::group([
 
             //resource Post
             Route::post('create', 'User\PostController@create');
-            Route::post('{post}/delete', 'User\PostController@delete');
+            Route::delete('{post}/delete', 'User\PostController@delete');
             Route::post('{post}/edit', 'User\PostController@edit');
+
+         
 
             //resource Like
             Route::get('{post}/get_like', 'User\LikeController@getLike');
@@ -63,7 +71,7 @@ Route::group([
             //resource comment
             Route::get('{post}/get_comment', 'User\CommentController@get');
             Route::post('{post}/create_comment', 'User\CommentController@create');
-            Route::post('{post}/{comment}/delete', 'User\CommentController@delete');
+            Route::delete('{post}/{comment}/delete', 'User\CommentController@delete');
             Route::post('{post}/{comment}/edit', 'User\CommentController@edit');
             
 
@@ -81,7 +89,7 @@ Route::group([
 ], function($router){
     Route::get('users', 'Admin\AdminController@getUser');
     Route::post('show/{user}', 'Admin\AdminController@show');
-    Route::post('delete/{user}', 'Admin\AdminController@delete');
+    Route::delete('delete/{user}', 'Admin\AdminController@delete');
     Route::post('create', 'Admin\AdminController@create');
     Route::post('update/{user}', 'Admin\AdminController@update');
 });
