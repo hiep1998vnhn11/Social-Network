@@ -76,7 +76,10 @@ Route::group([
             
 
             //resource sub comment
-            Route::get('{post}/{comment}/get_sub-comment', 'User\SubCommentController@getSubComment');
+            Route::get('{post}/{comment}/get_sub-comment', 'User\SubCommentController@get');
+            Route::post('{post}/{comment}/create_sub-comment', 'User\SubCommentController@create');
+            Route::post('{post}/{comment}/{sub_comment}/edit', 'User\SubCommentController@edit');
+            Route::delete('{post}/{comment}/{sub_comment}/delete', 'User\SubCommentController@delete');
 
         });
     });
