@@ -22,6 +22,7 @@ class UserService {
         $searchKey = Arr::get($param, 'search_key', null);
         $sort = Arr::get($param, 'sort', null);
         $query = User::select('users.name', 'users.url','users.created_at');
+        $superRole = Role::findById(3);
 
         if($searchKey){
             $query = $query->where(function ($q) use ($searchKey){
@@ -41,7 +42,12 @@ class UserService {
         $limit = Arr::get($param, 'limit', Consts::DEFAULT_PER_PAGE);
         $searchKey = Arr::get($param, 'search_key', null);
         $sort = Arr::get($param, 'sort', null);
-        $query = User::select('users.id', 'users.name', 'users.email', 'users.role','users.url', 'users.created_at', 'users.updated_at', 'users.avatar', 'users.background');
+        $viewerRole = role::findById(1);
+        $adminRole = Role::findById(2);
+        $superRole = Role::findById(3);
+        $blockedRole = Role::findById(4);
+
+        $query = User::select('users.id', 'users.name', 'users.email', 'users.url', 'users.created_at', 'users.updated_at', 'users.avatar', 'users.background');
 
         if($searchKey){
             $query = $query->where(function($q) use ($searchKey){
@@ -53,10 +59,14 @@ class UserService {
         }
 
         if($sort){
-            $query = $query->orderBy($sort);
+            $query = $query->orderBy($sort, 'desc');
         }
 
         $users = $query->paginate($limit);
+        foreach($users as $user){
+            $role = $user->getRoleNames()->first();
+            Arr::add($user, 'role', $role);
+        }
         return $users;
     }
 

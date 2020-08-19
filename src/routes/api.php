@@ -90,9 +90,17 @@ Route::group([
     'middleware' => ['role:admin|super-admin'],
     'prefix' => 'admin'
 ], function($router){
-    Route::get('users', 'Admin\AdminController@getUser');
-    Route::post('show/{user}', 'Admin\AdminController@show');
-    Route::delete('delete/{user}', 'Admin\AdminController@delete');
-    Route::post('create', 'Admin\AdminController@create');
-    Route::post('update/{user}', 'Admin\AdminController@update');
+    Route::group([
+        'prefix' => 'user'
+    ], function(){
+        Route::get('get', 'Admin\UserController@get');
+        Route::get('{user}/show', 'Admin\UserController@show');
+        Route::delete('{user}/delete', 'Admin\UserController@delete');
+    });
+
+    Route::group([
+        'prefix' => 'post'
+    ], function(){
+
+    });
 });

@@ -22,7 +22,6 @@ class UserSeeder extends Seeder
                 'email' => 'bot'.$i.'@gmail.com',
                 'password' => bcrypt('123456'),
                 'url' => Str::random(12),
-                'role' => 'viewer'
             ]);
             $user->assignRole($role);
             $post = App\Post::create([
