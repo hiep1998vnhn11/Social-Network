@@ -9,7 +9,9 @@ use App\Post;
 use App\Http\Services\PostService;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\PostRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends AppBaseController
 
@@ -25,6 +27,28 @@ class PostController extends AppBaseController
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function getForClient(Request $request){
+        if(!auth()->user()){
+            $data = $this->postService->getPostForGuest($request->all());
+            return $this->sendResponse($data);
+        } //guest
+        $isAdmin = 0;
+        $admins = DB::table('admin')->select('user_id')->get();
+        foreach($admins as $admin){
+            if(auth()->user()->id == $admin->user_id) $isAdmin = 1;
+        }
+
+        if($isAdmin){// Admin
+            $data = $this->postService->getPostForAdmin($request->all());
+            return $this->sendResponse($data);
+        } else {
+            $data = $this->postService->getPostForUser($request->all());
+            return $this->sendResponse($data);
+        }
+        
+        
+    }
 
     public function get(Request $request)
     {
@@ -55,17 +79,7 @@ class PostController extends AppBaseController
         return $this->sendResponse($data);
     }
 
-    public function getForFeed(Request $request)
-    {
-        $data = $this->postService->getPostForFeed($request->all());
-        return $this->sendResponse($data);
-    }
 
-    public function getPostByUserId(Request $request, User $user)
-    {
-        $data = $this->postService->getPostByUserId($request->all(), $user->id);
-        return $this->sendResponse($data);
-    }
     /**
      * Show the form for creating a new resource.
      *
@@ -104,7 +118,9 @@ class PostController extends AppBaseController
         if(auth()->user()->id != $post->user_id){
             return $this->sendMessageFail($fail);
         }
-
+        if($post->visible == 'blocked'){
+            return $this->sendMessageFail('This post was block by Admin!');
+        }
         $post->content = $request->content;
         $post->imageUrl = $request->imageUrl;
         if($request->visible)

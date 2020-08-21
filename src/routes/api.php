@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('get_users', 'User\UserController@getForClient');
+Route::get('get_posts', 'User\PostController@getForClient');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

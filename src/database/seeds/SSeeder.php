@@ -65,6 +65,9 @@ class SSeeder extends Seeder
              'password' => bcrypt('admin'),
          ]);
          $user->assignRole($role2);
+         App\Admin::create([
+             'user_id' => $user->id
+         ]);
  
          $user = Factory(App\User::class)->create([
              'name' => 'super-admin',
@@ -73,6 +76,9 @@ class SSeeder extends Seeder
              'password' => bcrypt('admin'),
          ]);
          $user->assignRole($role3);
+         App\Admin::create([
+            'user_id' => $user->id
+        ]);
  
          $user = Factory(App\User::class)->create([
              'name' => 'blocked',
