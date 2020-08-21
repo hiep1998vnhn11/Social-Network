@@ -18,26 +18,12 @@ use Spatie\Permission\Models\Role;
 
 class UserService {
     public function getUsers($param){
-        $searchKey = Arr::get($param, 'search_key', null);
-        $sort = Arr::get($param, 'sort', null);
         $userUrl = Arr::get($param, 'user_url', null);
-        $query = User::select('users.name', 'users.url','users.avatar', 'users.background', 'users.created_at');
-        $superRole = Role::findById(3);
-
+        $query = User::select('users.name', 'users.url','users.avatar', 'users.background', 'users.created_at'); 
         if($userUrl){
+            if(Str::contains($userUrl, ['admin'])) return [];
             $query = $query->where('users.url', $userUrl);
-        }
-
-        if($searchKey){
-            $query = $query->where(function ($q) use ($searchKey){
-                $q->where('users.name', 'like', '%'. $searchKey . '%');
-            });
-        }
-
-        if($sort){
-            $query = $query->orderBy($sort);
-        }
-
+        } else return [];
         $users = $query->get();
         return $users;
     }
@@ -46,10 +32,6 @@ class UserService {
         $limit = Arr::get($param, 'limit', Consts::DEFAULT_PER_PAGE);
         $searchKey = Arr::get($param, 'search_key', null);
         $sort = Arr::get($param, 'sort', null);
-        $viewerRole = role::findById(1);
-        $adminRole = Role::findById(2);
-        $superRole = Role::findById(3);
-        $blockedRole = Role::findById(4);
 
         $query = User::select('users.id', 'users.name', 'users.email', 'users.url', 'users.created_at', 'users.updated_at', 'users.avatar', 'users.background');
 
