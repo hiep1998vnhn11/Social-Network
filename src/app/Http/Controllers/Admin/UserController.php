@@ -38,7 +38,7 @@ class UserController extends AppBaseController
         $data = $this->userService->getUserForAdmin($request->all());
         return $this->sendResponse($data);
     }
-    
+
     /**
      * Display the specified resource.
      *
@@ -67,5 +67,10 @@ class UserController extends AppBaseController
         
         $user->delete();
         return $this->sendMessageSuccess($user, 'Delete user successfully!');
+    }
+
+    public function changeRoleToViewer(User $user)
+    {
+        
     }
 }

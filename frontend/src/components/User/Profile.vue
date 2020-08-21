@@ -45,6 +45,7 @@
             @click="loader = 'loading5'"
           >
             <v-icon dark>mdi-cloud-upload</v-icon>
+            Upload Image
           </v-btn>
         </v-card>
       </v-col>
