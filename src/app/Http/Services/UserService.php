@@ -18,11 +18,15 @@ use Spatie\Permission\Models\Role;
 
 class UserService {
     public function getUsers($param){
-        $limit = Arr::get($param, 'limit', Consts::DEFAULT_PER_PAGE);
         $searchKey = Arr::get($param, 'search_key', null);
         $sort = Arr::get($param, 'sort', null);
-        $query = User::select('users.name', 'users.url','users.created_at');
+        $userUrl = Arr::get($param, 'user_url', null);
+        $query = User::select('users.name', 'users.url','users.avatar', 'users.background', 'users.created_at');
         $superRole = Role::findById(3);
+
+        if($userUrl){
+            $query = $query->where('users.url', $userUrl);
+        }
 
         if($searchKey){
             $query = $query->where(function ($q) use ($searchKey){
@@ -34,7 +38,7 @@ class UserService {
             $query = $query->orderBy($sort);
         }
 
-        $users = $query->paginate($limit);
+        $users = $query->get();
         return $users;
     }
 

@@ -3,6 +3,7 @@
         "consts",
         "laravel",
         "spatie",
+        "swal",
         "tymon",
         "vuetify",
         "vuex"

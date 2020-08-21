@@ -1,21 +1,39 @@
 <template>
 <div style="padding:30px">
-  {{currentUser.name}}
-  {{currentUser.avatarUrl}}
-  {{currentUser.email}}
+  <fof v-if="!(paramUser.length)"></fof>
+  <div v-if="paramUser.length">
+    Hello user has url {{ $route.params.url }}
+  {{ paramUser }}
+  </div>
+  
 </div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
+import Fof from '@/views/404/Index'
+
 export default {
+  data: () => ({
+  }),
   metaInfo: { title: 'User Profile' },
-  computed: mapGetters(['currentUser']),
+  computed: mapGetters(['paramUser']),
+  components: {
+    Fof,
+  },
   created(){
-    if(this.currentUser === null) this.getCurrentUser()
+    if(this.paramUser === null) this.setUser(this.$route.params.url)
   },
   methods: {
-    ...mapActions(['getCurrentUser'])
+    ...mapActions(['getParamUser']),
+    setUser(url){
+      let meta = {
+        params: {
+          user_url: url
+        }  
+      }
+      this.getParamUser( meta )
+    },
   }
 }
 </script>

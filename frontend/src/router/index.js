@@ -26,9 +26,8 @@ Vue.use(VueRouter)
     { path: '/register', component: Register, name: 'Register', meta: {
       requiresVisitor: true
     }},
-    { path: '/profile', name: 'Profile', component: Profile, meta: {
-        requiresAuth: true
-    }},
+    { path: '/user/:url', name: 'User_profile', component: Profile
+    },
     { path: '*', name: 'FOF', component: FOF}
 ]
 

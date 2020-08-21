@@ -137,8 +137,8 @@ export default {
     },
     computed: {
       isLogin(){
-        return(this.$store.getters.currentUser) 
+        return(this.$store.getters.loggedIn) 
       }
-    }
+    },
 }
 </script>

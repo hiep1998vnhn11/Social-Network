@@ -5,11 +5,15 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import VueSweetalert2 from 'vue-sweetalert2';
+
 
 import './plugins'
 
 Vue.config.productionTip = false
 Vue.use(Cookies)
+Vue.use(VueSweetalert2);
+
 
 axios.defaults.baseURL = 'http://dev.socialnetwork.api.com/api'
 

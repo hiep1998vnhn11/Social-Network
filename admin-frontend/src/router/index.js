@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '@/components/Auth/Login'
 import Logout from '@/components/Auth/Logout'
+import User from '@/components/User/User'
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,11 @@ Vue.use(VueRouter)
     path: '/logout',
     name: 'Logout',
     component: Logout
+  },
+  {
+    path: '/users',
+    name: 'User-list',
+    component: User
   }
 
 ]

@@ -20,7 +20,7 @@ const getters = {
 const actions = {
     async fetchUser(context){
         context.state.setHeader()
-        const response = await axios.post('/admin/users');
+        const response = await axios.post('/admin/user/get');
         context.commit('SET_USER', response.data)
     },
     async login(context, user){
@@ -31,10 +31,8 @@ const actions = {
             })
             const token = auth.data.access_token
             axios.defaults.headers.common['Authorization'] = 'Bearer' + token
-            const UserApi = await axios.get('/user')
             Cookies.set('access_token', token)
             context.commit('RETRIEVE_TOKEN', token) 
-            context.commit('SET_CURRENT_USER', UserApi.data)
         } catch(err){
             alert('Email and Password you entered did not match our record! Please check and try again!')
         }
@@ -51,7 +49,7 @@ const actions = {
         context.state.setHeader()
         if(context.getters.loggedIn){
             return new Promise((resolve, reject) => {
-                axios.get('/auth/logout')
+                axios.post('/auth/logout')
                 .then(response => {
                     Cookies.remove('access_token')
                     context.commit('DESTROY_TOKEN')

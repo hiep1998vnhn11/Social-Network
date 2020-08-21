@@ -27,6 +27,11 @@ class UserController extends AppBaseController
         return $this->sendResponse($users);
     }
 
+    public function getForClient(Request $request){
+        $data = $this->userService->getUsers($request->all());
+        return $this->sendResponse($data);
+    }
+
     public function getInfoByUserId(User $user)
     {
         if($user->id == auth()->user()->id) return $this->sendResponse($user);
