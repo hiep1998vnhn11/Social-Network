@@ -22,6 +22,12 @@ class MessageController extends AppBaseController
         return $this->sendResponse($data);
     }
 
+    public function getForAuth(Request $request)
+    {
+        $data = $this->messageService->get($request->all());
+        return $this->sendResponse($data);
+    }
+
     public function send(MessageRequest $request, User $user)
     {
         $message = new Message();

@@ -21,7 +21,11 @@ class RegisterController extends AppBaseController
         $role = Role::findById(1);
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = bcrypt($request->password) ;
+        $user->password = bcrypt($request->password);
+        if($request->url){
+            $user->url = $request->url;
+        } else $user->url = Str::random(20);
+
         $user->assignRole($role);
         $user->save();
         return $this->sendResponse($user);

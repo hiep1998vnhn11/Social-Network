@@ -32,6 +32,9 @@ Route::group([
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
 
+    //message
+    Route::get('get_messages', 'User\MessageController@getForAuth');
+
     //User
     Route::group([ 
         'prefix' => 'user',

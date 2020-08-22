@@ -94,31 +94,31 @@ export default {
       }
     },
     data: () => ({
-          langs: [
-            {
-              text: 'Tiếng Việt',
-              value: 'vi'
-            },
-            {
-              text: 'English',
-              value: 'en'
-            },
-            {
-                text: '日本語',
-                value: 'ja'
-            }
-          ],
-          items: [
-                { icon: 'mdi-home', text: 'Home', link: '/home', auth: 'true' },
-                { icon: 'mdi-history', text: 'History', link: '/history', auth: 'true' },
-                { icon: 'mdi-cog', text: 'Settings', link: '/setting', auth: 'false' },
-                { icon: 'mdi-message', text: 'Message', link: '/message', auth: 'true' },
-                { icon: 'mdi-help-circle', text: 'Help', link: '/help', auth: 'false' },
-                { icon: 'mdi-account-outline', text: 'My Profile', link: '/profile', auth: 'true' },
-                { icon: 'mdi-account-question', text: 'About This Application', link: '/about', auth: 'false' },
-            ],
-            dialog: false,
-            drawer: null,
-        }),
+      langs: [
+        {
+          text: 'Tiếng Việt',
+          value: 'vi'
+        },
+        {
+          text: 'English',
+          value: 'en'
+        },
+        {
+            text: '日本語',
+            value: 'ja'
+        }
+      ],
+      items: [
+            { icon: 'mdi-home', text: 'Home', link: '/home', auth: 'true' },
+            { icon: 'mdi-history', text: 'History', link: '/history', auth: 'true' },
+            { icon: 'mdi-cog', text: 'Settings', link: '/setting', auth: 'false' },
+            { icon: 'mdi-message', text: 'Message', link: '/message', auth: 'true' },
+            { icon: 'mdi-help-circle', text: 'Help', link: '/help', auth: 'false' },
+            { icon: 'mdi-account-outline', text: 'My Profile', link: '/profile', auth: 'true' },
+            { icon: 'mdi-account-question', text: 'About This Application', link: '/about', auth: 'false' },
+        ],
+        dialog: false,
+        drawer: null,
+    }),
 }
 </script>

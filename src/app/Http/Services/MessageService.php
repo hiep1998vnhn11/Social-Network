@@ -43,4 +43,9 @@ class MessageService
         $messages = $query->orderBy('created_at', 'desc')->paginate($limit);
         return $messages;
     }
+
+    public function getForAuth($param)
+    {
+        
+    }
 }

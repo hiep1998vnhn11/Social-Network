@@ -8,6 +8,9 @@ import Profile from '@/components/User/Profile'
 import Logout from '@/components/User/Logout'
 import Home from '@/components/Home/Home'
 import FOF from '@/views/404/Index'
+import Post from '@/components/Post/Post'
+import Message from '@/components/Message/Message'
+import MyProfile from '@/components/User/MyProfile'
 
 Vue.use(VueRouter)
 
@@ -27,6 +30,19 @@ Vue.use(VueRouter)
       requiresVisitor: true
     }},
     { path: '/user/:url', name: 'User_profile', component: Profile
+    },
+    {
+      path: '/post/:post_id', name: 'Param_Post', component: Post
+    },
+    {
+      path: '/message', name: 'Message', component: Message, meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/myprofile', name: 'MyProfile', component: MyProfile, meta: {
+        requiresAuth: true
+      }
     },
     { path: '*', name: 'FOF', component: FOF}
 ]

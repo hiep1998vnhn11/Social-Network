@@ -11,44 +11,22 @@
     lazy-validation
   >
 
-    <v-text-field
-      v-model="email"
-      :rules="emailRules"
-      label="E-mail"
-      required
-    ></v-text-field>
+    <v-text-field  v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
 
-    <v-text-field
-      v-model="password"
-      type="password"
-      :rules="passwordRules"
-      label="Password"
-      required
-    ></v-text-field>
+    <v-text-field v-model="password" type="password" :rules="passwordRules" label="Password" required></v-text-field>
 
-    <v-checkbox
-      v-model="checkbox"
-      :rules="[v => !!v || 'You must agree to continue!']"
-      label="Remember me"
-      required
-    ></v-checkbox>
+    <v-checkbox v-model="checkbox" :rules="[v => !!v || 'You must agree to continue!']" label="Remember me" required></v-checkbox>
 
-    <v-btn
-      color="success"
-      class="mr-4"
-      @click="login"
-    >
+    <v-btn color="success" class="mr-4" @click="login">
       Login
     </v-btn>
 
 
   </v-form>
-    <v-row class="mb-6"
-      justify="center"
-      no-gutters>
+    <v-row class="mb-6" justify="center" no-gutters>
     Don't have a acount? go to <router-link to="/register">Register now!</router-link>
     </v-row>
-        </v-col>
+    </v-col>
     </v-container>
   
 </div>
@@ -83,17 +61,26 @@
       // ...mapActions(['login']),
       login(){
         if(!this.email){
-          alert('Please enter an email!')
+          this.$swal({
+            icon: 'info',
+            title: 'Email required',
+            text: 'Please enter your email!',
+          })
         } else if(!this.password){
-          alert('Please enter password!')
+          this.$swal({
+            icon: 'info',
+            title: 'Password required',
+            text: 'Please enter your password!',
+          })
         } else {
         this.$store.dispatch('login',
-         { email: this.email,
+         { 
+          email: this.email,
           password: this.password
          }
         )
         .then(() => {
-          this.$router.push('/profile')
+          this.$router.push('/home')
         })
        }
       }
