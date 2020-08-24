@@ -6,7 +6,7 @@ import Vue from 'vue'
 const state = {
     users: [],
     currentUser: null,
-    paramUser: null,
+    paramUser: [],
     token: Cookies.get('access_token') || null,
     setHeader(){
         axios.defaults.headers.common['Authorization'] = 'Bearer' + Cookies.get('access_token')

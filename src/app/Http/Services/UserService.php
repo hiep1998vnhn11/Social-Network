@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use App\User;
 use App\Consts;
+use App\Friend;
 use App\Post;
 use Spatie\Permission\Models\Role;
 
@@ -54,6 +55,70 @@ class UserService {
             Arr::add($user, 'role', $role);
         }
         return $users;
+    }
+
+    public function handleFriend($param){
+        if(!auth()->user()) return false;
+        $userUrl = Arr::get($param, 'user_url', null);
+        $relationship_status = Arr::get($param, 'relationship', null);
+
+        if(!$userUrl) return false;
+
+        $user = User::select('users.id', 'users.name')
+            ->where('users.url', $userUrl)
+            ->first();
+        if(!$user) return false;
+
+        $isFriend = Friend::join('users', 'friends.friend_id', 'users.id')
+            ->where('friends.user_id', auth()->user()->id)
+            ->where('users.url', $userUrl)
+            ->first();
+
+        if(!$relationship_status){
+            if($isFriend) return false;
+            $friend = new Friend();
+            $friend->user_id = auth()->user()->id;
+            $friend->friend_id = $user->id;
+            $friend->relationship = 'friend';
+            $friend->save();
+            return $friend;
+        } else {
+            switch ($relationship_status){
+                case 'blocked':
+                    if($isFriend){
+                        $isFriend->relationship = 'blocked';
+                        $isFriend->save();
+                        return $isFriend;
+                    } else {
+                        $friend = new Friend();
+                        $friend->user_id = auth()->user()->id;
+                        $friend->friend_id = $user->id;
+                        $friend->relationship = 'blocked';
+                        $friend->save();
+                        return $friend;
+                    }
+                    break;
+                case 'unFriend':
+                    if(!$isFriend) return false;
+                    else {
+                        $isFriend->relationship = 'unFriend';
+                        $isFriend->save();
+                        return $isFriend;
+                    }
+                    break;
+                case 'friend':
+                    if(!$isFriend) return false;
+                    else {
+                        $isFriend->relationship = 'friend';
+                        $isFriend->save();
+                        return $isFriend;
+                    }
+                    break;
+                default:
+                    return false;
+            }
+        }
+        
     }
 
 }

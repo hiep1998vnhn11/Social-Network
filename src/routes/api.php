@@ -35,6 +35,9 @@ Route::group([
     //message
     Route::get('get_messages', 'User\MessageController@getForAuth');
 
+    //friend
+    Route::get('handle_friend', 'User\UserController@handleFriend');
+
     //User
     Route::group([ 
         'prefix' => 'user',

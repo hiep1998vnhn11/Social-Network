@@ -1,5 +1,10 @@
 <template>
   <v-container class="grey lighten-5">
+              {{paramPost.data[0].likes}}<br />
+              {{paramPost.data[0].comments}} <br />
+                            {{paramPost.data[0].comments.sub_comments}}
+
+
   <fof v-if="!paramPost.data.length"></fof>
   <div v-else>
   <v-card class="mx-auto">

@@ -31,21 +31,28 @@ class MessageService
                            ->where('messages.received_id', auth()->user()->id);
               });
             }
+            if($searchKey){
+                $query = $query->where('messages.content', 'like', '%' .$searchKey . '%');
+            }
+    
+            $messages = $query->orderBy('created_at', 'desc')->paginate($limit);
+            return $messages;
         } else {
-        $query = $query->where('messages.sent_id', auth()->user()->id)
-            ->where('messages.received_id', auth()->user()->id);
+            $query = $query->where('messages.sent_id', auth()->user()->id)
+                ->where('messages.received_id', auth()->user()->id);
+            $messages = $query->orderBy('created_at', 'desc')->paginate($limit);
+            $users = [];
+            foreach($messages as $message){
+                
+            }
+            return $users;
         }
 
-        if($searchKey){
-            $query = $query->where('messages.content', 'like', '%' .$searchKey . '%');
-        }
-
-        $messages = $query->orderBy('created_at', 'desc')->paginate($limit);
-        return $messages;
+       
     }
 
     public function getForAuth($param)
     {
-        
+
     }
 }

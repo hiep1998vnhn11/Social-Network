@@ -21,6 +21,17 @@
       "share": "Chia sẻ"
     },
 
+    "create_post": {
+      "private": "Chỉ mình tôi",
+      "privacy": "Quyền riêng tư",
+      "public": "Mọi người",
+      "friend": "Chỉ bạn bè",
+      "blocked": "Bị chặn bởi người quản trị",
+      "writeSt": "Hãy viết gì đó ...",
+      "thinkSt": "Bạn đang nghĩ gì ...",
+      "post": "Đăng bài này"
+    },
+
     "count": {
       "likes": "Đã like",
       "comments": "Bình luận",

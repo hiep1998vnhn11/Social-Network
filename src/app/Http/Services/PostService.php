@@ -22,7 +22,8 @@ class PostService {
         $visible = Arr::get($param, 'visible', 'public');
 
         $query = Post::join('users', 'posts.user_id', 'users.id')
-            ->select('posts.id', 'posts.user_id','users.name as user_name', 'posts.content', 'posts.imageUrl', 'posts.visible', 'posts.created_at');
+            ->select('posts.id', 'posts.user_id','users.name as user_name', 'users.avatar as user_avatar',
+                'users.url as user_url', 'posts.content', 'posts.imageUrl', 'posts.visible', 'posts.created_at');
         if($userID){
             $query = $query->where('posts.user_id', $userID);
         }
@@ -80,7 +81,8 @@ class PostService {
         $searchKey = Arr::get($param, 'search_key', null);
 
         $query = Post::join('users', 'posts.user_id', 'users.id')
-            ->select('posts.id', 'posts.user_id','users.name as user_name', 'users.avatar as user_avatar', 'users.url as user_url', 'posts.content', 'posts.imageUrl', 'posts.visible', 'posts.created_at')
+            ->select('posts.id', 'posts.user_id','users.name as user_name','users.url as user_url', 'users.avatar as user_avatar',
+             'users.avatar as user_avatar', 'users.url as user_url', 'posts.content', 'posts.imageUrl', 'posts.visible', 'posts.created_at')
             ->where('posts.visible', 'public');
         
         if($userID){
@@ -140,7 +142,8 @@ class PostService {
         $searchKey = Arr::get($param, 'search_key', null);
 
         $query = Post::join('users', 'posts.user_id', 'users.id')
-            ->select('posts.id', 'posts.user_id','users.name as user_name', 'posts.content', 'posts.imageUrl', 'posts.visible', 'posts.created_at');
+            ->select('posts.id', 'posts.user_id','users.name as user_name','users.url as user_url',  'users.avatar as user_avatar',
+            'posts.content', 'posts.imageUrl', 'posts.visible', 'posts.created_at');
         
         if($userID){
             if($postID) return null;
@@ -207,7 +210,8 @@ class PostService {
         $visible = Arr::get($param, 'visible', 'public');
 
         $query = Post::join('users', 'posts.user_id', 'users.id')
-            ->select('posts.id', 'posts.user_id','users.name as user_name', 'posts.content', 'posts.imageUrl', 'posts.visible', 'posts.created_at');
+            ->select('posts.id', 'posts.user_id','users.name as user_name', 'users.url as user_url',  'users.avatar as user_avatar',
+            'posts.content', 'posts.imageUrl', 'posts.visible', 'posts.created_at');
         if($userID){
             $query = $query->where('posts.user_id', $userID);
         }

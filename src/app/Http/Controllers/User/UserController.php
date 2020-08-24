@@ -11,6 +11,7 @@ use App\Http\Services\PostService;
 use App\Post;
 use App\User;
 use Carbon\Carbon;
+use App\Friend;
 
 class UserController extends AppBaseController
 {
@@ -41,6 +42,15 @@ class UserController extends AppBaseController
             'created_at' => $user->created_at
         ];
         return $this->sendResponse($data);
+    }
+
+    public function handleFriend(Request $request)
+    {
+        $success = 'Handle like successfully!';
+        $fail = 'Handle add friend fail! Something went wrong with server...';
+        $message = $this->userService->handleFriend($request->all());
+        if(!$message) return $this->sendMessageFail($fail);
+        else return $this->sendMessageSuccess($message, $success);
     }
 
 }

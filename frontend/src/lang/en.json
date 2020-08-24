@@ -21,6 +21,20 @@
       "share": "Share"
     },
 
+    "create_post": {
+      "private": "Private",
+      "privacy": "Privacy",
+      "public": "Public",
+      "friend": "Friend only",
+      "blocked": "Blocked by Admin",
+      "writeSt": "Write something ...",
+      "thinkSt": "What's do you thinking ...",
+      "post": "Post this article",
+      "content": "Content",
+      "add": "Add to post...",
+      "image": "Image"
+    },
+
     "count": {
       "likes": "Likes",
       "comments": "Comments",
