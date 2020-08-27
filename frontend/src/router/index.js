@@ -11,6 +11,7 @@ import FOF from '@/views/404/Index'
 import Post from '@/components/Post/Post'
 import Message from '@/components/Message/Message'
 import MyProfile from '@/components/User/MyProfile'
+import Test from '@/components/Test'
 
 Vue.use(VueRouter)
 
@@ -43,6 +44,9 @@ Vue.use(VueRouter)
       path: '/myprofile', name: 'MyProfile', component: MyProfile, meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: '/test', name: 'Test', component: Test
     },
     { path: '*', name: 'FOF', component: FOF}
 ]

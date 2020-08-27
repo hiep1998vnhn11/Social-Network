@@ -37,7 +37,7 @@ const actions = {
         const currentUserApi = await axios.post('/auth/me')
         context.commit('SET_CURRENT_USER', currentUserApi.data)
     },
-    async login(context, user){
+    async login({context}, user){ 
         try{
             const auth = await axios.post('/auth/login', {
                 email: user.email,

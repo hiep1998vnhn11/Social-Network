@@ -10084,6 +10084,11 @@ vue-eslint-parser@^7.0.0:
     esquery "^1.0.1"
     lodash "^4.17.15"
 
+vue-facebook-login-component@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/vue-facebook-login-component/-/vue-facebook-login-component-2.3.0.tgz#3358df387ac94f4394884abbbc06aa98607ffbc9"
+  integrity sha512-Uo5EyeMhRTCRBB5V5cBeEuLrdlBl6kTIMXug2U1CfKdYv+KYYCitZpTvy1j8OgRvzKzqdpyMAJ2R6puTLpof5g==
+
 vue-filter-date-format@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/vue-filter-date-format/-/vue-filter-date-format-1.3.1.tgz#b27750060c0e531fb3794ca0a9640223c58be03c"
