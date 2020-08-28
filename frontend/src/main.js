@@ -9,17 +9,24 @@ import VueSweetalert2 from 'vue-sweetalert2'
 import i18n from './lang/i18n'
 import { Datetime } from 'vue-datetime'
 import 'vue-datetime/dist/vue-datetime.css'
-import VueFilterDateFormat from 'vue-filter-date-format';
-
-
-
+import VueFilterDateFormat from 'vue-filter-date-format'
+import VueSocialauth from 'vue-social-auth'
+import VueAxios from 'vue-axios'
 
 import './plugins'
 
 Vue.config.productionTip = false
 Vue.use(Cookies)
+Vue.use(VueSocialauth, {
+  providers: {
+    github: {
+      clientId: '',
+      redirectUri: '/auth/github/callback' // Your client app URL
+    }
+  }
+})
 Vue.use(VueSweetalert2)
-Vue.use(Datetime)
+Vue.use(Datetime, VueAxios)
 Vue.use(VueFilterDateFormat, {
   dayOfWeekNames: [
     'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',

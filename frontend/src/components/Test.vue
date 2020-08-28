@@ -1,13 +1,30 @@
-<template>
-  <v-facebook-login app-id="307639560457826"></v-facebook-login>
-</template>
-
 <script>
-  import VFacebookLogin from 'vue-facebook-login-component'
+export default {
+  data(){
+    return {
 
-  export default {
-    components: {
-      VFacebookLogin
+    }
+  },
+  methods: {
+    AuthProvider(provider){
+      var self = this
+      this.$auth.authenticate(provider)
+        .then(response => {
+          self.SocialLogin(provider, response)
+        })
+        .catch(err => {
+          console.log({err: err})
+        })
+    },
+    SocialLogin(provider, response){
+      this.$http.post('/login/' + provider, response)
+        .then(response => {
+          console.log(response.data)
+        })
+        .catch(err => {
+          console.log( {err: err})
+        })
     }
   }
+}
 </script>
