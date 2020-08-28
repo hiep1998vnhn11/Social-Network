@@ -2,7 +2,7 @@
 namespace App\Http\Services;
 
 use App\Consts;
-use App\Message;
+use App\Models\Message;
 use Illuminate\Support\Arr;
 
 class MessageService

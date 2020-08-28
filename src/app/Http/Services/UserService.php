@@ -12,8 +12,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use App\User;
 use App\Consts;
-use App\Friend;
-use App\Post;
+use App\Models\Friend;
+use App\Models\Post;
 use Spatie\Permission\Models\Role;
 
 

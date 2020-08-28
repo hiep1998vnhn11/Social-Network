@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\MessageRequest;
-use App\Message;
+use App\Models\Message;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Services\MessageService;
 

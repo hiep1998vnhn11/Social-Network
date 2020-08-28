@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\CommentRequest;
-use App\Post;
-use App\Comment;
-use App\Sub_Comment;
+use App\Models\Post;
+use App\Models\Comment;
+use App\Models\Sub_Comment;
 
 class SubCommentController extends AppBaseController
 {

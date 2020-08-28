@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,6 +12,6 @@ class Sub_Comment extends Model
         return $this->belongsTo('App\User');
     }
     public function comment(){
-        return $this->belongsTo('App\Comment');
+        return $this->belongsTo('App\Models\Comment');
     }
 }

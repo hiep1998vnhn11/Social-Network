@@ -2,16 +2,16 @@
 
 namespace App\Http\Services;
 
-use App\Comment;
+use App\Models\Comment;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Arr;
-use App\Post;
+use App\Models\Post;
 use App\Consts;
-use App\Like;
-use App\Sub_Comment;
+use App\Models\Like;
+use App\Models\Sub_Comment;
 use Illuminate\Support\Facades\DB;
 class PostService {
 

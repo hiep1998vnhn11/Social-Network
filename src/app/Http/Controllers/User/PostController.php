@@ -5,7 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
-use App\Post;
+use App\Models\Post;
 use App\Http\Services\PostService;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\PostRequest;

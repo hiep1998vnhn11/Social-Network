@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,10 +17,10 @@ class Post extends Model
     }
 
     public function like(){
-        return $this->hasMany('App\Like', 'post_id', 'id');
+        return $this->hasMany('App\Models\Like', 'post_id', 'id');
     }
 
     public function comment(){
-        return $this->hasMany('App\Comment', 'post_id', 'id');
+        return $this->hasMany('App\Models\Comment', 'post_id', 'id');
     }
 }

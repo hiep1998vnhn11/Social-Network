@@ -8,10 +8,10 @@ use App\Http\Services\UserService;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\PostRequest;
 use App\Http\Services\PostService;
-use App\Post;
+use App\Models\Post;
 use App\User;
 use Carbon\Carbon;
-use App\Friend;
+use App\Models\Friend;
 
 class UserController extends AppBaseController
 {

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Comment;
-use App\Post;
+use App\Models\Comment;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Services\PostService;
