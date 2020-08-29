@@ -37,7 +37,7 @@ const actions = {
         const currentUserApi = await axios.post('/auth/me')
         context.commit('SET_CURRENT_USER', currentUserApi.data)
     },
-    async login({context}, user){ 
+    async login({commit}, user){ 
         try{
             const auth = await axios.post('/auth/login', {
                 email: user.email,
@@ -47,14 +47,14 @@ const actions = {
             axios.defaults.headers.common['Authorization'] = 'Bearer' + token
             const UserApi = await axios.post('/auth/me')
             Cookies.set('access_token', token)
-            context.commit('RETRIEVE_TOKEN', token) 
-            context.commit('SET_CURRENT_USER', UserApi.data)
-        } catch(err){
+            commit('RETRIEVE_TOKEN', token) 
+            commit('SET_CURRENT_USER', UserApi.data)
+        }catch(err){
             Vue.swal({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Something went wrong!',
-                footer: '<a href>Why do I have this issue?</a>'
+                text: 'Something went wrong with server... Please try another time...',
+                footer: '<a href>How can I fix this issue?</a>'
             })
         }
     },
@@ -66,7 +66,7 @@ const actions = {
             password: data.password,
             password_confirmation: data.password_confirmation
         })
-        console.log(authRegister)
+        console.log(authRegister.data.message)
     },
 
     async deleteUser(context, idUser){

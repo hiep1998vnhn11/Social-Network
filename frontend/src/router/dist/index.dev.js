@@ -33,6 +33,8 @@ var _MyProfile = _interopRequireDefault(require("@/components/User/MyProfile"));
 
 var _Test = _interopRequireDefault(require("@/components/Test"));
 
+var _History = _interopRequireDefault(require("@/components/Navbar/History"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 _vue["default"].use(_vueRouter["default"]);
@@ -97,6 +99,10 @@ var routes = [{
   path: '/test',
   name: 'Test',
   component: _Test["default"]
+}, {
+  path: '/history',
+  name: 'History',
+  component: _History["default"]
 }, {
   path: '*',
   name: 'FOF',

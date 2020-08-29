@@ -18,8 +18,6 @@ var _vueSweetalert = _interopRequireDefault(require("vue-sweetalert2"));
 
 var _i18n = _interopRequireDefault(require("./lang/i18n"));
 
-var _vueDatetime = require("vue-datetime");
-
 require("vue-datetime/dist/vue-datetime.css");
 
 var _vueFilterDateFormat = _interopRequireDefault(require("vue-filter-date-format"));
@@ -27,6 +25,8 @@ var _vueFilterDateFormat = _interopRequireDefault(require("vue-filter-date-forma
 var _vueSocialAuth = _interopRequireDefault(require("vue-social-auth"));
 
 var _vueAxios = _interopRequireDefault(require("vue-axios"));
+
+var _vueFriendlyIframe = _interopRequireDefault(require("vue-friendly-iframe"));
 
 require("./plugins");
 
@@ -48,7 +48,7 @@ _vue["default"].use(_vueSocialAuth["default"], {
 
 _vue["default"].use(_vueSweetalert["default"]);
 
-_vue["default"].use(_vueDatetime.Datetime, _vueAxios["default"]);
+_vue["default"].use(_vueAxios["default"], _vueFriendlyIframe["default"]);
 
 _vue["default"].use(_vueFilterDateFormat["default"], {
   dayOfWeekNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
@@ -57,7 +57,7 @@ _vue["default"].use(_vueFilterDateFormat["default"], {
   monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 });
 
-_vue["default"].component('datetime', _vueDatetime.Datetime);
+_vue["default"].component('vue-friendly-iframe', _vueFriendlyIframe["default"]);
 
 _axios["default"].defaults.baseURL = 'http://dev.socialnetwork.api.com/api';
 

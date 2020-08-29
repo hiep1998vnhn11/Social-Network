@@ -3,8 +3,6 @@
               {{paramPost.data[0].likes}}<br />
               {{paramPost.data[0].comments}} <br />
                             {{paramPost.data[0].comments.sub_comments}}
-
-
   <fof v-if="!paramPost.data.length"></fof>
   <div v-else>
   <v-card class="mx-auto">
@@ -47,18 +45,24 @@
       </v-row>
     <v-divider class="mx-4"></v-divider>
     <v-card-actions>
-      <v-btn text width=375>              
-        <v-icon >mdi-heart-outline</v-icon>
-         {{$t('action.like')}}
-      </v-btn>
-      <v-btn text width=375>
-        <v-icon>mdi-comment-outline</v-icon>
-        {{$t('action.comment')}}
-      </v-btn>
-      <v-btn text width=375>
-        <v-icon>mdi-share-variant-outline</v-icon>
-        {{$t('action.share')}}
-      </v-btn>
+      <v-col cols=4>
+        <v-btn text block>
+          <v-icon >mdi-heart-outline</v-icon> 
+          {{$t('action.like')}} 
+        </v-btn>
+      </v-col>
+      <v-col cols=4>
+        <v-btn text block>
+          <v-icon>mdi-comment-outline</v-icon>
+          {{$t('action.comment')}}
+        </v-btn> 
+      </v-col>
+      <v-col cols=4>
+        <v-btn text block>
+          <v-icon>mdi-share-variant-outline</v-icon>
+          {{$t('action.share')}}
+        </v-btn> 
+      </v-col>
     </v-card-actions>
   </v-card>
   </div>

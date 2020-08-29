@@ -7,11 +7,12 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import VueSweetalert2 from 'vue-sweetalert2'
 import i18n from './lang/i18n'
-import { Datetime } from 'vue-datetime'
 import 'vue-datetime/dist/vue-datetime.css'
 import VueFilterDateFormat from 'vue-filter-date-format'
 import VueSocialauth from 'vue-social-auth'
 import VueAxios from 'vue-axios'
+import VueFriendlyIframe from 'vue-friendly-iframe'
+
 
 import './plugins'
 
@@ -26,7 +27,9 @@ Vue.use(VueSocialauth, {
   }
 })
 Vue.use(VueSweetalert2)
-Vue.use(Datetime, VueAxios)
+Vue.use(VueAxios, VueFriendlyIframe)
+
+
 Vue.use(VueFilterDateFormat, {
   dayOfWeekNames: [
     'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
@@ -45,9 +48,7 @@ Vue.use(VueFilterDateFormat, {
   ]
 });
 
-Vue.component('datetime', Datetime);
-
-
+Vue.component('vue-friendly-iframe', VueFriendlyIframe)
 
 axios.defaults.baseURL = 'http://dev.socialnetwork.api.com/api'
 

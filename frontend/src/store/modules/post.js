@@ -18,7 +18,7 @@ const actions = {
     async getPost(context){
         context.state.setHeader()
         let url = '/auth/user/post/get'
-        const response = await axios.get(url, {params: {limit: 5, page: 2}});
+        const response = await axios.get(url);
         context.commit('SET_POST', response.data)
     },
     async getParamPost({ commit, state }, payload){

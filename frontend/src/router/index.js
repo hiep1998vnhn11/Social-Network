@@ -12,6 +12,7 @@ import Post from '@/components/Post/Post'
 import Message from '@/components/Message/Message'
 import MyProfile from '@/components/User/MyProfile'
 import Test from '@/components/Test'
+import History from '@/components/Navbar/History'
 
 Vue.use(VueRouter)
 
@@ -47,6 +48,9 @@ Vue.use(VueRouter)
     },
     {
       path: '/test', name: 'Test', component: Test
+    },
+    {
+      path: '/history', name: 'History', component: History
     },
     { path: '*', name: 'FOF', component: FOF}
 ]
