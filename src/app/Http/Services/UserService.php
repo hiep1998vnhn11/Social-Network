@@ -58,7 +58,7 @@ class UserService {
     }
 
     public function handleFriend($param){
-        if(!auth()->user()) return false;
+        if(!auth('api')->user()) return false;
         $userUrl = Arr::get($param, 'user_url', null);
         $relationship_status = Arr::get($param, 'relationship', null);
 
@@ -70,14 +70,14 @@ class UserService {
         if(!$user) return false;
 
         $isFriend = Friend::join('users', 'friends.friend_id', 'users.id')
-            ->where('friends.user_id', auth()->user()->id)
+            ->where('friends.user_id', auth('api')->user()->id)
             ->where('users.url', $userUrl)
             ->first();
 
         if(!$relationship_status){
             if($isFriend) return false;
             $friend = new Friend();
-            $friend->user_id = auth()->user()->id;
+            $friend->user_id = auth('api')->user()->id;
             $friend->friend_id = $user->id;
             $friend->relationship = 'friend';
             $friend->save();
@@ -91,7 +91,7 @@ class UserService {
                         return $isFriend;
                     } else {
                         $friend = new Friend();
-                        $friend->user_id = auth()->user()->id;
+                        $friend->user_id = auth('api')->user()->id;
                         $friend->friend_id = $user->id;
                         $friend->relationship = 'blocked';
                         $friend->save();

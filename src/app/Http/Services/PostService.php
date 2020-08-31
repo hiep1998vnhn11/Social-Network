@@ -149,7 +149,7 @@ class PostService {
             if($postID) return null;
             else {
                 $query = $query->where('posts.user_id', $userID);
-                if(auth()->user()->id == $userID)
+                if(auth('api')->user()->id == $userID)
                     $query = $query->whereIn('posts.visible', ['public', 'friend', 'private']);
                 else $query = $query->where('posts.visible', ['public', 'friend']);
                 if($searchKey){

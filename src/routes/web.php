@@ -30,3 +30,7 @@ Route::group(['prefix' => 'admin'], function () {
 
 // Route::get('login/{provider}', 'User\SocialiteController@redirect');
 // Route::get('auth/{provider}/callback', 'User\SocialiteController@callback');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

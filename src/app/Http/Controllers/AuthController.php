@@ -26,7 +26,7 @@ class AuthController extends AppBaseController
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->setTTL(1800)->attempt($credentials)) {
+        if (! $token = auth('api')->setTTL(1800)->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -40,7 +40,7 @@ class AuthController extends AppBaseController
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        return response()->json(auth('api')->user());
     }
 
     /**
@@ -50,7 +50,7 @@ class AuthController extends AppBaseController
      */
     public function logout()
     {
-        auth()->logout();
+        auth('api')->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
     }
@@ -62,7 +62,7 @@ class AuthController extends AppBaseController
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken(auth('api')->refresh());
     }
 
     /**
@@ -78,7 +78,7 @@ class AuthController extends AppBaseController
             'success' => true,
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
             'current' => \Carbon\Carbon::now()->toDateTimeString()
         ]);
     }

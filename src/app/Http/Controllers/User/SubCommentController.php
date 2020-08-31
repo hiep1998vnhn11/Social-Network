@@ -25,7 +25,7 @@ class SubCommentController extends AppBaseController
     public function create(CommentRequest $request, Comment $comment)
     {
         $sub_comment = new Sub_Comment();
-        $sub_comment->user_id = auth()->user()->id;
+        $sub_comment->user_id = auth('api')->user()->id;
         $sub_comment->comment_id = $comment->id;
         $sub_comment->content = $request->content;
         $sub_comment->save();
@@ -35,7 +35,7 @@ class SubCommentController extends AppBaseController
 
     public function edit(CommentRequest $request, Comment $comment, Sub_Comment $sub_Comment)
     {
-        if($sub_Comment->user_id != auth()->user()->id)
+        if($sub_Comment->user_id != auth('api')->user()->id)
             return $this->sendMessageFail('Edit Sub comment permission denied!');
         
         if($sub_Comment->comment_id != $comment->id)
@@ -47,7 +47,7 @@ class SubCommentController extends AppBaseController
 
     public function delete(Comment $comment, Sub_Comment $sub_Comment)
     {
-        if($sub_Comment->user_id != auth()->user()->id)
+        if($sub_Comment->user_id != auth('api')->user()->id)
             return $this->sendMessageFail('Delete Sub comment permission denied!');
         if($sub_Comment->comment_id != $comment->id)
             return $this->sendMessageFail('Delete Sub comment permission denied!');

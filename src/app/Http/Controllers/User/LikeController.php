@@ -24,7 +24,7 @@ class LikeController extends AppBaseController
         $success = 'Handle like successfully!';
         if($post->visible = 'blocked') return $this->sendMessageFail('This post was blocked by admin!');
 
-        $isLiked = Like::where('user_id', auth()->user()->id)
+        $isLiked = Like::where('user_id', auth('api')->user()->id)
             ->where('post_id', $post->id)
             ->first();
         if($isLiked){
@@ -40,7 +40,7 @@ class LikeController extends AppBaseController
             }
         } else{ //hadn't liked =>create()
             $like = new Like;
-            $like->user_id = auth()->user()->id;
+            $like->user_id = auth('api')->user()->id;
             $like->post_id = $post->id;
             $like->save();
             return $this->sendMessageSuccess($like, $success);
