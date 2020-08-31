@@ -1,5 +1,13 @@
 <template>
   <v-container>
+    <router-link to="/about" v-slot="{ href, navigate }">
+      <NavLink :href="href" @click="navigate">about</NavLink>
+    </router-link>
+    <router-link to="/foo" v-slot="{ href, route, navigate, isActive, isExactActive }">
+      <li :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active']">
+        <a :href="href" @click="navigate">{{ route.fullPath }}</a>
+      </li>
+    </router-link>
     <v-row>
       <v-col cols="8">
         <create-post></create-post>
@@ -10,10 +18,10 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row>
-      <post-component post_id='1'></post-component>
-      <post-component post_id='2'></post-component>
-
+    <v-row cols="8" v-for="post in allPosts.data.data" :key="post.id">
+      <v-col cols=8>
+        <post-component :post="post"></post-component>
+      </v-col>
     </v-row>
   </v-container>
 </template>

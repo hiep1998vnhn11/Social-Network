@@ -1,97 +1,159 @@
 <template>
-  <v-container class="grey lighten-5">
-              {{paramPost.data[0].likes}}<br />
-              {{paramPost.data[0].comments}} <br />
-                            {{paramPost.data[0].comments.sub_comments}}
-  <fof v-if="!paramPost.data.length"></fof>
-  <div v-else>
-  <v-card class="mx-auto">
-    <v-list-item>
-      <v-list-item-avatar color="grey">
-        <img :src="paramPost.data[0].user_avatar" :alt="paramPost.data[0].user_name">
-      </v-list-item-avatar>
-      <v-list-item-content>
-        <v-list-item-title>
-          <router-link color="black" :to="{ name: 'User_profile', params: { url: paramPost.data[0].user_url }}">
-            {{ paramPost.data[0].user_name }}
-          </router-link>
-        </v-list-item-title>
-        <v-list-item-subtitle>
-            {{ paramPost.data[0].created_at }}
-        </v-list-item-subtitle>
-      </v-list-item-content>
-    </v-list-item>
-    <v-container>
-        {{ paramPost.data[0].content }}
-        <v-img :src="paramPost.data[0].imageUrl"></v-img>
- 
-    </v-container>
-      <v-row>
-        <v-tooltip top>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn v-bind="attrs" v-on="on" icon>
-          <v-icon color="primary">mdi-heart</v-icon>
-          
+  <div class="grey lighten-5">
+    <fof v-if="!post"></fof>
+    <div v-else>
+    <v-card class="mx-auto">
+      <v-list-item>
+        <router-link :to="{ name: 'User_profile', params: { url: post.user_url }}" v-slot="{ href, navigate }">
+          <v-list-item-avatar color="grey">
+            <img :src="post.user_avatar" :alt="post.user_name" @click="navigate" :href="href">
+          </v-list-item-avatar>
+        </router-link>
+        <v-list-item-content>
+          <v-list-item-title>
+            <router-link :to="{ name: 'User_profile', params: { url: post.user_url }}" v-slot="{ href, navigate }">
+              <strong><NavLink :href="href" @click="navigate">{{ post.user_name }}</NavLink></strong>
+            </router-link>
+          </v-list-item-title>
+          <v-list-item-subtitle>
+            {{ post.created_at }}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-container>
+        {{ post.content }}
+        <v-img :src="post.imageUrl"></v-img>
+      </v-container>
+        <v-row>
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn v-bind="attrs" v-on="on" icon>
+                <v-icon color="primary">mdi-heart</v-icon>
+              </v-btn>
+            </template>
+            <span>{{ post.likes }}</span>
+          </v-tooltip>
+          {{post.like_count}}
+          {{$t('count.likes')}}
+          <v-spacer></v-spacer>
+          <v-icon color="primary">mdi-comment</v-icon>
+          {{post.comment_count}}
+          {{$t('count.comments')}}
+        </v-row>
+      <v-divider class="mx-4"></v-divider>
+      <v-card-actions>
+        <v-col cols=4>
+          <v-btn text block>
+            <v-icon >mdi-heart-outline</v-icon> 
+            {{$t('action.like')}} 
+          </v-btn>
+        </v-col>
+        <v-col cols=4>
+          <v-btn text block @click="writeComment = true">
+            <v-icon>mdi-comment-outline</v-icon>
+            {{$t('action.comment')}}
+          </v-btn> 
+        </v-col>
+        <v-col cols=4>
+          <v-btn text block>
+            <v-icon>mdi-share-variant-outline</v-icon>
+            {{$t('action.share')}}
+          </v-btn> 
+        </v-col>
+      </v-card-actions>
+    </v-card>
+    </div>
+    <v-dialog v-model="writeComment" hide-overlay max-width="1000px">
+      <v-card>
+        <v-toolbar>
+            <v-btn icon @click="writeComment = false">
+            <v-icon color="dark">mdi-close</v-icon>
+            </v-btn>
+            <v-toolbar-title center>Comment to this post ...</v-toolbar-title>
+        </v-toolbar>
+        <v-container> 
+          {{ post.comments }} 
+          <v-row justify="space-around" v-for="comment in post.comments" :key="comment.id">
+              <v-col cols='1'>
+                <v-avatar size="40">
+                  <img :src="comment.user_avatar" :alt="comment.user_name">
+                </v-avatar>
+              </v-col>
+              <v-col cols='11'>
+                <v-card style="border-radius: 5px">
+                  <a style="color:black"><strong>{{ comment.user_name }}</strong></a>
+                  <br />
+                   {{ comment.content }} 
+                  <br />
+                    <v-row justify="space-around" v-for="sub_comment in comment.sub_comments" :key="sub_comment.id">
+                      <v-col cols='1'>
+                        <v-avatar size="40">
+                          <img :src="sub_comment.user_avatar" :alt="sub_comment.user_name">
+                        </v-avatar>
+                      </v-col>
+                      <v-col cols='11'>
+                        <v-card style="border-radius: 5px">
+                          <a style="color:black"><strong>{{ sub_comment.user_name }}</strong></a>
+                          <br />
+                          {{ sub_comment.content }} 
+                        </v-card>
+                      </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+          </v-row>
+          <v-divider></v-divider>
+          <v-row justify="space-around">
+              <v-col cols='1'>
+                <v-avatar size="40">
+                  <img :src="currentUser.avatar" :alt="currentUser.name">
+                </v-avatar>
+              </v-col>
+              <v-col cols='11'>
+                <v-text-field clearable 
+                  :label="$t('create_post.content')" 
+                  v-model="comment"
+                  append-icon="mdi-file-image-outline"
+                  @click:append="upload">
+                </v-text-field>  
+              </v-col>
+          </v-row>
+        <v-btn color="primary" block @click="onComment">
+          Comment
         </v-btn>
-      </template>
-      <span>{{ paramPost.data[0].likes }}</span>
-    </v-tooltip>
-      {{paramPost.data[0].like_count}}
-      {{$t('count.likes')}}
-      <v-spacer></v-spacer>
-      <v-icon color="primary">mdi-comment</v-icon>
-      {{paramPost.data[0].comment_count}}
-      {{$t('count.comments')}}
-      </v-row>
-    <v-divider class="mx-4"></v-divider>
-    <v-card-actions>
-      <v-col cols=4>
-        <v-btn text block>
-          <v-icon >mdi-heart-outline</v-icon> 
-          {{$t('action.like')}} 
-        </v-btn>
-      </v-col>
-      <v-col cols=4>
-        <v-btn text block>
-          <v-icon>mdi-comment-outline</v-icon>
-          {{$t('action.comment')}}
-        </v-btn> 
-      </v-col>
-      <v-col cols=4>
-        <v-btn text block>
-          <v-icon>mdi-share-variant-outline</v-icon>
-          {{$t('action.share')}}
-        </v-btn> 
-      </v-col>
-    </v-card-actions>
-  </v-card>
+        </v-container>  
+        </v-card>
+    </v-dialog>
+    <v-dialog v-model="addImage" hide-overlay max-width="600px">
+        <h1>he</h1>
+    </v-dialog>
   </div>
-  </v-container>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
 import Fof from '@/views/404/Index'
+import { mapGetters } from 'vuex'
 
 export default {
-    created(){
-        if(this.paramPost == null) this.setPost(this.post_id)
-    },
-    computed: mapGetters(['paramPost']),
-    methods: {
-        ...mapActions(['getParamPost']),
-        setPost(post_id){
-            let meta = {
-                params: {
-                    post_id: post_id
-                }
-            }
-            this.getParamPost(meta)
-        }
-    }, 
     components: {
         Fof,
     },
-    props: ['post_id']
+    props: ['post'],
+    data: () => {
+      return {
+        writeComment: false,
+        comment: '',
+      }
+    },
+    computed: mapGetters(['currentUser']),
+    methods: {
+      upload(){
+        this.comment=''
+      },
+      onComment(){
+        
+      }
+    }
+
 }
 </script>
