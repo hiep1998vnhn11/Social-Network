@@ -26,7 +26,7 @@ class SocialiteController extends AppBaseController
             $findUser = User::where('email', $getInfo->email)->first();
             if($findUser){
 
-                if (! $token = auth()->setTTL(1800)->login($findUser)) {
+                if (! $token = auth('api')->setTTL(1800)->login($findUser)) {
                     return response()->json(['error' => 'Unauthorized'], 401);
                 }
                 return $this->respondWithToken($token);
@@ -44,7 +44,7 @@ class SocialiteController extends AppBaseController
 
                 $user->save();
 
-                if (! $token = auth()->setTTL(1800)->login($user)) {
+                if (! $token = auth('api')->setTTL(1800)->login($user)) {
                     return response()->json(['error' => 'Unauthorized'], 401);
                 }
                 return $this->respondWithToken($token);
@@ -66,7 +66,7 @@ class SocialiteController extends AppBaseController
                 $user->save();
             }
             
-            if (! $token = auth()->setTTL(1800)->login($user)) {
+            if (! $token = auth('api')->setTTL(1800)->login($user)) {
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
             return $this->respondWithToken($token);
@@ -79,7 +79,7 @@ class SocialiteController extends AppBaseController
             'success' => true,
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
             'current' => \Carbon\Carbon::now()->toDateTimeString()
         ]);
     }

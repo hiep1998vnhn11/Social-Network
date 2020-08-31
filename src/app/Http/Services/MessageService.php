@@ -18,17 +18,17 @@ class MessageService
           ->select('messages.sent_id', 'users.name as sent_name', 'messages.content', 'messages.received_id', 'users2.name as received_name', 'messages.created_at');
         
         if($userID){
-            if($userID == auth()->user()->id){
-                $query = $query->where('messages.sent_id', auth()->user()->id)
-                ->where('messages.received_id', auth()->user()->id);
+            if($userID == auth('api')->user()->id){
+                $query = $query->where('messages.sent_id', auth('api')->user()->id)
+                ->where('messages.received_id', auth('api')->user()->id);
             } else{
             $query = $query->where(function ($send) use ($userID){
-                $send->where('messages.sent_id', auth()->user()->id)
+                $send->where('messages.sent_id', auth('api')->user()->id)
                      ->where('messages.received_id', $userID);
             })
               ->orWhere(function ($received) use ($userID){
                   $received->where('messages.sent_id', $userID)
-                           ->where('messages.received_id', auth()->user()->id);
+                           ->where('messages.received_id', auth('api')->user()->id);
               });
             }
             if($searchKey){
@@ -38,8 +38,8 @@ class MessageService
             $messages = $query->orderBy('created_at', 'desc')->paginate($limit);
             return $messages;
         } else {
-            $query = $query->where('messages.sent_id', auth()->user()->id)
-                ->where('messages.received_id', auth()->user()->id);
+            $query = $query->where('messages.sent_id', auth('api')->user()->id)
+                ->where('messages.received_id', auth('api')->user()->id);
             $messages = $query->orderBy('created_at', 'desc')->paginate($limit);
             $users = [];
             foreach($messages as $message){

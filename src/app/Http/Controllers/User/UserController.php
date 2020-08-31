@@ -35,7 +35,7 @@ class UserController extends AppBaseController
 
     public function getInfoByUserId(User $user)
     {
-        if($user->id == auth()->user()->id) return $this->sendResponse($user);
+        if($user->id == auth('api')->user()->id) return $this->sendResponse($user);
         $data = [
             'name' => $user->name,
             'url' => $user->url,

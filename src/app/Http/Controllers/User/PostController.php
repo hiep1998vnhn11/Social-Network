@@ -29,14 +29,14 @@ class PostController extends AppBaseController
      */
 
     public function getForClient(Request $request){
-        if(!auth()->user()){
+        if(!auth('api')->user()){
             $data = $this->postService->getPostForGuest($request->all());
             return $this->sendResponse($data);
         } //guest
         $isAdmin = 0;
         $admins = DB::table('admin')->select('user_id')->get();
         foreach($admins as $admin){
-            if(auth()->user()->id == $admin->user_id) $isAdmin = 1;
+            if(auth('api')->user()->id == $admin->user_id) $isAdmin = 1;
         }
 
         if($isAdmin){// Admin
@@ -91,7 +91,7 @@ class PostController extends AppBaseController
         $post->content = $request->content;
         $post->imageUrl = $request->imageUrl;
         $post->visible = $request->visible;
-        $post->user_id = auth()->user()->id;
+        $post->user_id = auth('api')->user()->id;
         $post->save();
 
        $success = 'Create post successfully!';
@@ -102,7 +102,7 @@ class PostController extends AppBaseController
     {
         $fail = 'Delete post permission denied!';
         $success = 'Delete post successfully';
-        if(auth()->user()->id != $post->user_id){
+        if(auth('api')->user()->id != $post->user_id){
             return $this->sendMessageFail($fail);
         }
 
@@ -115,7 +115,7 @@ class PostController extends AppBaseController
         $fail = 'Edit post permission denied!';
         $success = 'Edit post successfully';
 
-        if(auth()->user()->id != $post->user_id){
+        if(auth('api')->user()->id != $post->user_id){
             return $this->sendMessageFail($fail);
         }
         if($post->visible == 'blocked'){

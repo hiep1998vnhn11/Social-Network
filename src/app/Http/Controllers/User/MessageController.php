@@ -31,7 +31,7 @@ class MessageController extends AppBaseController
     public function send(MessageRequest $request, User $user)
     {
         $message = new Message();
-        $message->sent_id = auth()->user()->id;
+        $message->sent_id = auth('api')->user()->id;
         $message->received_id = $user->id;
         $message->content = $request->content;
         $message->save();
@@ -43,7 +43,7 @@ class MessageController extends AppBaseController
     {
         $fail = 'Edit message permission denied!';
         $success = 'Update message successfully!';
-        if($message->sent_id != auth()->user()->id || $message->received_id != $user->id)
+        if($message->sent_id != auth('api')->user()->id || $message->received_id != $user->id)
             return $this->sendMessageFail($fail);
 
         $message->content = $request->content;
@@ -56,7 +56,7 @@ class MessageController extends AppBaseController
     {
         $fail = 'Delete message permission denied!';
         $success = 'Delete message successfully!';
-        if($message->sent_id != auth()->user()->id || $message->received_id != $user->id)
+        if($message->sent_id != auth('api')->user()->id || $message->received_id != $user->id)
             return $this->sendMessageFail($fail);
 
         $message->delete();

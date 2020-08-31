@@ -24,7 +24,7 @@ class CommentController extends AppBaseController
         if($post->visible = 'blocked') return $this->sendMessageFail('This post was blocked by admin!');
         $comment = new Comment();
         $comment->post_id = $post->id;
-        $comment->user_id = auth()->user()->id;
+        $comment->user_id = auth('api')->user()->id;
         $comment->content = $request->content;
         $comment->save();
 
@@ -36,7 +36,7 @@ class CommentController extends AppBaseController
     {
         $fail = 'Edit comment fail!';
         $success = 'Update comment successfully!';
-        if($comment->user_id != auth()->user()->id){
+        if($comment->user_id != auth('api')->user()->id){
             return $this->sendMessageFail($fail);
         }
 
@@ -50,7 +50,7 @@ class CommentController extends AppBaseController
     {
         $fail='Delete comment fail';
         $success='Delete comment successfully';
-        if($comment->user_id != auth()->user()->id)
+        if($comment->user_id != auth('api')->user()->id)
             return $this->sendMessageFail($fail);
 
         $comment->delete();

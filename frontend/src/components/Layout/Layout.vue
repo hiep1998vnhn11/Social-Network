@@ -112,7 +112,7 @@ export default {
     ...mapActions(['getCurrentUser'])
   },
   created(){
-    if(!this.currentUser) {
+    if(!this.currentUser && this.isLogin) {
       this.getCurrentUser()
     }
   }

@@ -75,7 +75,7 @@ import Fof from '@/views/404/Index'
 
 export default {
     created(){
-        if(this.paramPost == null) this.setPost(this.$route.params.post_id)
+        if(this.paramPost == null) this.setPost(this.post_id)
     },
     computed: mapGetters(['paramPost']),
     methods: {
@@ -92,5 +92,6 @@ export default {
     components: {
         Fof,
     },
+    props: ['post_id']
 }
 </script>

@@ -101,12 +101,12 @@ var actions = {
     });
   },
   login: function login(_ref2, user) {
-    var context, auth, token, UserApi;
+    var commit, auth, token, UserApi;
     return regeneratorRuntime.async(function login$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
-            context = _ref2.context;
+            commit = _ref2.commit;
             _context4.prev = 1;
             _context4.next = 4;
             return regeneratorRuntime.awrap(_axios["default"].post('/auth/login', {
@@ -126,8 +126,8 @@ var actions = {
 
             _jsCookie["default"].set('access_token', token);
 
-            context.commit('RETRIEVE_TOKEN', token);
-            context.commit('SET_CURRENT_USER', UserApi.data);
+            commit('RETRIEVE_TOKEN', token);
+            commit('SET_CURRENT_USER', UserApi.data);
             _context4.next = 18;
             break;
 
@@ -138,8 +138,8 @@ var actions = {
             _vue["default"].swal({
               icon: 'error',
               title: 'Oops...',
-              text: 'Something went wrong!',
-              footer: '<a href>Why do I have this issue?</a>'
+              text: 'Something went wrong with server... Please try another time...',
+              footer: '<a href>How can I fix this issue?</a>'
             });
 
           case 18:
@@ -165,7 +165,7 @@ var actions = {
 
           case 2:
             authRegister = _context5.sent;
-            console.log(authRegister);
+            console.log(authRegister.data.message);
 
           case 4:
           case "end":
