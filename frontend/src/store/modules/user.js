@@ -47,6 +47,8 @@ const actions = {
             axios.defaults.headers.common['Authorization'] = 'Bearer' + token
             const UserApi = await axios.post('/auth/me')
             Cookies.set('access_token', token)
+            Cookies.set('user_url', UserApi.data.url)
+            // console.log(UserApi.data)
             commit('RETRIEVE_TOKEN', token) 
             commit('SET_CURRENT_USER', UserApi.data)
         }catch(err){
@@ -83,6 +85,7 @@ const actions = {
                 axios.post('/auth/logout')
                 .then(response => {
                     Cookies.remove('access_token')
+                    Cookies.remove('user_url')
                     context.commit('DESTROY_TOKEN')
                     resolve(response)
                     // console.log(token)

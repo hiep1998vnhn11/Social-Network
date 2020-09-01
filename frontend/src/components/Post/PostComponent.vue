@@ -12,7 +12,7 @@
         <v-list-item-content>
           <v-list-item-title>
             <router-link :to="{ name: 'User_profile', params: { url: post.user_url }}" v-slot="{ href, navigate }">
-              <strong><NavLink :href="href" @click="navigate">{{ post.user_name }}</NavLink></strong>
+              <strong><p :href="href" @click="navigate">{{ post.user_name }}</p></strong>
             </router-link>
           </v-list-item-title>
           <v-list-item-subtitle>
@@ -103,7 +103,7 @@
               </v-col>
           </v-row>
           <v-divider></v-divider>
-          <v-row justify="space-around">
+          <v-row v-if="loggedIn" justify="space-around">
               <v-col cols='1'>
                 <v-avatar size="40">
                   <img :src="currentUser.avatar" :alt="currentUser.name">
@@ -118,14 +118,14 @@
                 </v-text-field>  
               </v-col>
           </v-row>
-        <v-btn color="primary" block @click="onComment">
+          <v-row v-if="!loggedIn" justify="space-around">
+            You are not login! Please login for Comment!
+          </v-row>
+        <v-btn v-if="loggedIn" color="primary" block @click="onComment">
           Comment
         </v-btn>
         </v-container>  
         </v-card>
-    </v-dialog>
-    <v-dialog v-model="addImage" hide-overlay max-width="600px">
-        <h1>he</h1>
     </v-dialog>
   </div>
 </template>
@@ -145,7 +145,7 @@ export default {
         comment: '',
       }
     },
-    computed: mapGetters(['currentUser']),
+    computed: mapGetters(['currentUser', 'loggedIn']),
     methods: {
       upload(){
         this.comment=''

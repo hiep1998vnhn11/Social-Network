@@ -2,26 +2,25 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import About from '@/views/about/Index'
 import App from '@/views/app/Index'
-import Login from '@/components/User/Login'
-import Register from '@/components/User/Register'
-import Profile from '@/components/User/Profile'
-import Logout from '@/components/User/Logout'
-import Home from '@/components/Home/Home'
+import Login from '@/pages/Auth/Login'
+import Register from '@/pages/Auth/Register'
+import Profile from '@/pages/User/Profile'
+import Logout from '@/pages/Auth/Logout'
+import Home from '@/pages/Home/Home'
 import FOF from '@/views/404/Index'
-import Post from '@/components/Post/Post'
-import Message from '@/components/Message/Message'
-import MyProfile from '@/components/User/MyProfile'
-import Test from '@/components/Test'
+import Post from '@/pages/Post/Post'
+import Message from '@/pages/Message/Message'
+import MyProfile from '@/pages/User/MyProfile'
 import History from '@/components/Navbar/History'
 
 Vue.use(VueRouter)
 
   const routes = [
     { path: '/about', component: About },
-    { path: '/', component: App, name: 'App', meta: {
+    { path: '/app', component: App, name: 'App', meta: {
       requiresVisitor: true
     }},
-    { path: '/home', component: Home, name: 'Home', meta: {
+    { path: '/', component: Home, name: 'Home', meta: {
       requiresAuth: true
     }},
     { path: '/login', component: Login, name: 'Login', meta: {
@@ -45,9 +44,6 @@ Vue.use(VueRouter)
       path: '/myprofile', name: 'MyProfile', component: MyProfile, meta: {
         requiresAuth: true
       }
-    },
-    {
-      path: '/test', name: 'Test', component: Test
     },
     {
       path: '/history', name: 'History', component: History

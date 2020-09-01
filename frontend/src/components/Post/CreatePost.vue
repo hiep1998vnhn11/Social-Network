@@ -105,6 +105,7 @@ export default {
       chooseVisible: false,
       visible: null,
       content: null,
+      'addImage': false
   })
 }
 </script>

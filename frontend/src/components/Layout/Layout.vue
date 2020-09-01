@@ -41,9 +41,9 @@
         </template>
         <span>{{$t('common.register')}}</span>
       </v-tooltip>
-      <v-tooltip bottom v-if="isLogin">
+      <v-tooltip bottom v-if="!isLogin">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on" to="/"><v-icon>mdi-apps</v-icon></v-btn>
+          <v-btn icon v-bind="attrs" v-on="on" to="/app"><v-icon>mdi-apps</v-icon></v-btn>
         </template>
         <span>{{$t('common.go_app')}}</span>
       </v-tooltip>
@@ -88,7 +88,7 @@ export default {
         }
       ],
       items: [
-          { icon: 'mdi-home', text: 'Home', link: '/home', auth: true },
+          { icon: 'mdi-home', text: 'Home', link: '/', auth: true },
           { icon: 'mdi-history', text: 'History', link: '/history', auth: true },
           { icon: 'mdi-cog', text: 'Settings', link: '/setting', auth: true },
           { icon: 'mdi-message', text: 'Message', link: '/message', auth: false },
