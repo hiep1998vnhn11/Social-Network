@@ -4,9 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Post;
 
 class PostController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('check:admin');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +20,12 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        return 'hello';
+        return $posts = Post::with('user')->orderBy('created_at', 'desc')->paginate(10);
+        dd($posts);
+        return view('admin.postIndex')->with([
+            'posts' => $posts
+        ]);
     }
 
     /**

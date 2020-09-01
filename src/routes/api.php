@@ -33,6 +33,7 @@ Route::group([
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
+    Route::post('change_url', 'User\UserController@changeUrl');
 
     //message
     Route::get('get_messages', 'User\MessageController@getForAuth');

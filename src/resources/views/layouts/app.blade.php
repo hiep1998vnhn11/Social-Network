@@ -33,7 +33,6 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -71,10 +70,13 @@
                 </div>
             </div>
         </nav>
-
-        <main class="py-4">
-            @yield('content')
-        </main>
-    </div>
+        <div class="row content_h">
+            <div class="p-0 pt-4 col-2 col-md-2 default_b_color">
+                @include('layouts.sidemenu')
+            </div>
+            <div class="col-10 col-md-10 my-3 mx-auto">
+                @yield('content')
+            </div>
+        </div>
 </body>
 </html>

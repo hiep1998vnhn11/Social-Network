@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
     {
         $i = 1;
         $role = Role::findById(1);
-        for($i; $i<=10; $i++){
+        for($i; $i<=1000; $i++){
             $user = Factory(App\User::class)->create([
                 'name' => Str::random(6),
                 'email' => 'bot'.$i.'@gmail.com',
@@ -39,7 +39,7 @@ class UserSeeder extends Seeder
             ]);
         };
 
-        for($j=1;$j<=10;$j++){
+        for($j=1;$j<=900;$j++){
             for($i=1;$i<=100;$i++){
                 App\Models\Message::create([
                     'sent_id' => $j,

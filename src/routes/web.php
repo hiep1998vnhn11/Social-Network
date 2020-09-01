@@ -19,7 +19,10 @@ Route::get('/', function () {
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['prefix' => 'admin'], function () {
+Route::group([
+    'prefix' => 'admin',
+    'middleware' => 'check:admin'
+], function () {
     Route::get('login', 'Server\AuthController@getLogin')->name('login');
     Route::post('login', 'Server\AuthController@postLogin')->name('login');
     Route::get('top', 'AdminAuthController@index');
@@ -31,6 +34,8 @@ Route::group(['prefix' => 'admin'], function () {
 // Route::get('login/{provider}', 'User\SocialiteController@redirect');
 // Route::get('auth/{provider}/callback', 'User\SocialiteController@callback');
 
-Auth::routes();
+Auth::routes([
+    'register' => false,
+]);
 
 Route::get('/home', 'HomeController@index')->name('home');

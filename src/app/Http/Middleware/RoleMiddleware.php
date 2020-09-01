@@ -21,16 +21,16 @@ class RoleMiddleware
             ? $role
             : explode('|', $role);
         $code = Consts::UNAUTHORIZED_CODE;
-        if (!auth()->user()){
+        if (!auth('api')->user()){
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized!',
                 'error_code' => $code
-            ]);
+            ],$code);
         }
-        if (! auth()->user()->hasAnyRole($roles)) {
+        if (! auth('api')->user()->hasAnyRole($roles)) {
             return response()->json([
-                'success' => true,
+                'success' => false,
                 'message' => 'permission denied!',
                 'current' => \Carbon\Carbon::now()->toDateTimeString(),
                 'role' => explode('|', $role)
