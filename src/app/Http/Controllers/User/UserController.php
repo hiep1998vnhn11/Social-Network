@@ -26,12 +26,12 @@ class UserController extends AppBaseController
         $this->postService = $postService;
     }
     public function get(Request $request){
-        $users = $this->userService->getUsers($request->all());
+        $users = $this->userService->getUser($request->all());
         return $this->sendResponse($users);
     }
 
     public function getForClient(Request $request){
-        $data = $this->userService->getUsers($request->all());
+        $data = $this->userService->getUser($request->all());
         return $this->sendResponse($data);
     }
 

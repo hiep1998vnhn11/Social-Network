@@ -2,66 +2,105 @@
   <div class="grey lighten-5">
     <fof v-if="!post"></fof>
     <div v-else>
-    <v-card class="mx-auto">
-      <v-list-item>
-        <router-link :to="{ name: 'User_profile', params: { url: post.user_url }}" v-slot="{ href, navigate }">
-          <v-list-item-avatar color="grey">
-            <img :src="post.user_avatar" :alt="post.user_name" @click="navigate" :href="href">
-          </v-list-item-avatar>
-        </router-link>
-        <v-list-item-content>
-          <v-list-item-title>
-            <router-link :to="{ name: 'User_profile', params: { url: post.user_url }}" v-slot="{ href, navigate }">
-              <strong><p :href="href" @click="navigate">{{ post.user_name }}</p></strong>
-            </router-link>
-          </v-list-item-title>
-          <v-list-item-subtitle>
-            {{ post.created_at }}
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-      <v-container>
-        {{ post.content }}
-        <v-img :src="post.imageUrl"></v-img>
-      </v-container>
+      <v-card class="mx-auto">
+        <v-list-item>
+          <router-link :to="{ name: 'User_profile', params: { url: post.user_url }}" v-slot="{ href, navigate }">
+            <v-list-item-avatar color="grey">
+              <img :src="post.user_avatar" :alt="post.user_name" @click="navigate" :href="href">
+            </v-list-item-avatar>
+          </router-link>
+          <v-list-item-content>
+            <v-list-item>
+              <router-link :to="{ name: 'User_profile', params: { url: post.user_url }}" v-slot="{ href, navigate }">
+                <div class="font-weight-black" :href="href" @click="navigate">{{ post.user_name }}</div>
+              </router-link>
+              <v-spacer></v-spacer>
+              <v-menu bottom offset-y >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn icon v-bind="attrs" v-on="on" >
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item @click="deletePost">
+                    <v-list-item-icon> <v-icon>mdi-trash-can-outline</v-icon></v-list-item-icon>
+                    <v-list-item-title>Delete this post</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="deletePost">
+                    <v-list-item-icon> <v-icon>mdi-trash-can-outline</v-icon></v-list-item-icon>
+                    <v-list-item-title>Delete this post</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+              <v-menu>
+                <template v-slot:activator="{ on: menu, attrs }">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on: tooltip }">
+                      <v-btn  v-bind="attrs" v-on="{ ...tooltip, ...menu }" icon>
+                        <v-icon>mdi-dots-vertical</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Option</span>
+                  </v-tooltip>
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(item, index) in items"
+                    :key="index"
+                    @click="deletePost"
+                  >
+                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-list-item>
+            <v-list-item-subtitle>
+              {{ post.created_at }}
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-container>
+          {{ post.content }}
+          <v-img :src="post.imageUrl"></v-img>
+        </v-container>
         <v-row>
-          <v-tooltip top>
+          <v-tooltip top class="text-body1">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn v-bind="attrs" v-on="on" icon>
+              <v-btn class="text-body1" v-bind="attrs" v-on="on" icon>
                 <v-icon color="primary">mdi-heart</v-icon>
               </v-btn>
             </template>
-            <span>{{ post.likes }}</span>
+            <span class="text-body1">{{ post.likes }}</span>
           </v-tooltip>
-          {{post.like_count}}
+          {{ post.like_count }}
           {{$t('count.likes')}}
           <v-spacer></v-spacer>
           <v-icon color="primary">mdi-comment</v-icon>
           {{post.comment_count}}
           {{$t('count.comments')}}
         </v-row>
-      <v-divider class="mx-4"></v-divider>
-      <v-card-actions>
-        <v-col cols=4>
-          <v-btn text block>
-            <v-icon >mdi-heart-outline</v-icon> 
-            {{$t('action.like')}} 
-          </v-btn>
-        </v-col>
-        <v-col cols=4>
-          <v-btn text block @click="writeComment = true">
-            <v-icon>mdi-comment-outline</v-icon>
-            {{$t('action.comment')}}
-          </v-btn> 
-        </v-col>
-        <v-col cols=4>
-          <v-btn text block>
-            <v-icon>mdi-share-variant-outline</v-icon>
-            {{$t('action.share')}}
-          </v-btn> 
-        </v-col>
-      </v-card-actions>
-    </v-card>
+        <v-divider class="mx-4"></v-divider>
+        <v-card-actions>
+          <v-col cols=4>
+            <v-btn class="text-body-1" text block>
+              <v-icon >mdi-heart-outline</v-icon> 
+              <span class="text-capitalize">{{$t('action.like')}} </span>
+            </v-btn>
+          </v-col>
+          <v-col cols=4>
+            <v-btn class="text-capitalize" text block @click="writeComment = true">
+              <v-icon>mdi-comment-outline</v-icon>
+              {{$t('action.comment')}}
+            </v-btn> 
+          </v-col>
+          <v-col cols=4>
+            <v-btn text block class="text-capitalize">
+              <v-icon>mdi-share-variant-outline</v-icon>
+              {{$t('action.share')}}
+            </v-btn> 
+          </v-col>
+        </v-card-actions>
+      </v-card>
     </div>
     <v-dialog v-model="writeComment" hide-overlay max-width="1000px">
       <v-card>
@@ -143,6 +182,7 @@ export default {
       return {
         writeComment: false,
         comment: '',
+        option: false,
       }
     },
     computed: mapGetters(['currentUser', 'loggedIn']),

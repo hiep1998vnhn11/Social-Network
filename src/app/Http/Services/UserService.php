@@ -1,32 +1,25 @@
 <?php
 
 namespace App\Http\Services;
-use Carbon\Carbon;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use App\User;
 use App\Consts;
 use App\Models\Friend;
-use App\Models\Post;
-use Spatie\Permission\Models\Role;
 
 
-class UserService {
-    public function getUsers($param){
+
+class UserService 
+{
+    public function getUser($param){
         $userUrl = Arr::get($param, 'user_url', null);
-        $query = User::select('users.name', 'users.url','users.avatar', 'users.background', 'users.created_at'); 
+        $query = User::select('users.id','users.name', 'users.url','users.avatar', 'users.background', 'users.created_at'); 
         if($userUrl){
-            if(Str::contains($userUrl, ['admin'])) return [];
+            if(Str::contains($userUrl, ['admin'])) return null;
             $query = $query->where('users.url', $userUrl);
-        } else return [];
-        $users = $query->get();
-        return $users;
+        } else return null;
+        $user = $query->first();
+        return $user;
     }
 
     public function getUserForAdmin($param){

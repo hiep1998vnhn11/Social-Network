@@ -61,6 +61,7 @@
             <v-textarea clearable :label="$t('create_post.content')" v-model="content"></v-textarea>
             </v-container>
         </v-row>
+         
         <v-container>
             <v-toolbar dense>
             <v-toolbar-title>{{$t('create_post.add')}}</v-toolbar-title>
@@ -76,27 +77,46 @@
             </v-toolbar>  
         </v-container>
         <v-divider></v-divider>
-        <v-btn color="primary" width="577px" @click="onPost">
+        <v-btn color="primary" block @click="onPost">
             Post this article
         </v-btn>
         </v-container>  
         </v-card>
     </v-dialog>
     <v-dialog v-model="addImage" hide-overlay max-width="600px">
-        <h1>he</h1>
+        <v-row>
+            <v-container>
+            <v-textarea clearable :label="$t('create_post.content')" v-model="imageUrl"></v-textarea>
+            </v-container>
+        </v-row>
     </v-dialog>
     </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import axios from 'axios'
+
 export default {
   metaInfo: { title: 'Home' },
   computed: mapGetters(['currentUser']),
   methods: {
-    onPost(){
+    async onPost(){
+        const url = '/auth/user/post/create'
+        const response = await axios.post(url, {
+            visible: this.visible,
+            content: this.content,
+            imageUrl: this.imageUrl
+        })
+        console.log(response)
+        this.$swal({
+          icon: 'success',
+          title: 'Success',
+          text: response.message,
+        })
       this.visible = null
       this.content = null
+      this.imageUrl = null
       this.writePost = false
     }
   },
@@ -105,6 +125,7 @@ export default {
       chooseVisible: false,
       visible: null,
       content: null,
+      imageUrl: null,
       'addImage': false
   })
 }

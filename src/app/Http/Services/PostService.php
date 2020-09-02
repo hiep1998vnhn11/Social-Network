@@ -32,7 +32,6 @@ class PostService {
             $query = $query->where('posts.visible', $visible);
         }
 
-
         if($searchKey){
             $query = $query->where(function ($q) use ($searchKey){
                 $q->where('posts.content', 'like', '%' . $searchKey . '%')
@@ -73,11 +72,10 @@ class PostService {
         return $posts;
         
     }
-
     public function getPostForGuest($param){
-        $limit = Arr::get($param, 'limit', Consts::DEFAULT_PER_PAGE);
-        $userID = Arr::get($param, 'user_id', null);
-        $postID = Arr::get($param, 'post_id', null);
+        $limit     = Arr::get($param, 'limit', Consts::DEFAULT_PER_PAGE);
+        $userID    = Arr::get($param, 'user_id', null);
+        $postID    = Arr::get($param, 'post_id', null);
         $searchKey = Arr::get($param, 'search_key', null);
 
         $query = Post::join('users', 'posts.user_id', 'users.id')
@@ -94,45 +92,73 @@ class PostService {
                         $q->where('posts.content', 'like', '%' . $searchKey . '%');
                     });
                 }
+                $posts = $query->orderBy('posts.created_at', 'desc')->paginate($limit);
+                $comment_count = 0;
+                foreach($posts as $post){
+                    $likes = Like::join('users', 'likes.user_id', 'users.id')
+                        ->select('users.url', 'users.name as user_name', 'likes.created_at')
+                        ->where('likes.post_id', $post->id)
+                        ->where('likes.status', 1)
+                        ->orderBy('likes.created_at', 'desc')
+                        ->get();
+                    $comments = Comment::join('users', 'comments.user_id', 'users.id')
+                        ->select('users.url', 'users.name as user_name', 'comments.content', 'comments.created_at')
+                        ->where('comments.post_id', $post->id)
+                        ->orderBy('comments.created_at', 'desc')
+                        ->get();
+                    $comment_count += count($comments);
+                        foreach($comments as $comment){
+                            $sub_comment = Sub_Comment::join('users', 'sub_comments.user_id', 'users.id')
+                                ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'sub_comments.created_at')
+                                ->where('sub_comments.comment_id', $comment->id)
+                                ->orderBy('sub_comments.created_at', 'desc')
+                                ->get();
+                            Arr::add($comment, 'sub_comment_count', count($sub_comment));
+                            Arr::add($comment, 'sub_comments', $sub_comment);
+                            $comment_count += count($sub_comment);
+                        }
+                    Arr::add($post, 'like_count', count($likes));
+                    Arr::add($post, 'comment_count', $comment_count);
+                    Arr::add($post, 'likes', $likes);
+                    Arr::add($post, 'comments', $comments);
+                    $comment_count = 0;
+                }
+                return $posts;
             }
         } else {
             if(!$postID) return null;
             else {
-                $query = $query->where('posts.id', $postID);
+                $post = $query->where('posts.id', $postID)->first();
+                $comment_count = 0;
+                $likes = Like::join('users', 'likes.user_id', 'users.id')
+                    ->select('users.url', 'users.name as user_name', 'likes.created_at')
+                    ->where('likes.post_id', $post->id)
+                    ->where('likes.status', 1)
+                    ->orderBy('likes.created_at', 'desc')
+                    ->get();
+                $comments = Comment::join('users', 'comments.user_id', 'users.id')
+                    ->select('users.url', 'users.name as user_name', 'comments.content', 'comments.created_at')
+                    ->where('comments.post_id', $post->id)
+                    ->orderBy('comments.created_at', 'desc')
+                    ->get();
+                $comment_count += count($comments);
+                    foreach($comments as $comment){
+                        $sub_comment = Sub_Comment::join('users', 'sub_comments.user_id', 'users.id')
+                            ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'sub_comments.created_at')
+                            ->where('sub_comments.comment_id', $comment->id)
+                            ->orderBy('sub_comments.created_at', 'desc')
+                            ->get();
+                        Arr::add($comment, 'sub_comment_count', count($sub_comment));
+                        Arr::add($comment, 'sub_comments', $sub_comment);
+                        $comment_count += count($sub_comment);
+                    }
+                Arr::add($post, 'like_count', count($likes));
+                Arr::add($post, 'comment_count', $comment_count);
+                Arr::add($post, 'likes', $likes);
+                Arr::add($post, 'comments', $comments);
+                return $post;
             }
         }
-
-        $posts = $query->orderBy('posts.created_at', 'desc')->paginate($limit);
-        $comment_count = 0;
-        foreach($posts as $post){
-            $likes = Like::join('users', 'likes.user_id', 'users.id')
-                ->select('users.url', 'users.name as user_name', 'likes.created_at')
-                ->where('likes.post_id', $post->id)
-                ->where('likes.status', 1)
-                ->orderBy('likes.created_at', 'desc')
-                ->get();
-            $comments = Comment::join('users', 'comments.user_id', 'users.id')
-                ->select('users.url', 'users.name as user_name', 'comments.content', 'comments.created_at')
-                ->where('comments.post_id', $post->id)
-                ->orderBy('comments.created_at', 'desc')
-                ->get();
-            $comment_count += count($comments);
-                foreach($comments as $comment){
-                    $sub_comment = Sub_Comment::join('users', 'sub_comments.user_id', 'users.id')
-                        ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'sub_comments.created_at')
-                        ->where('sub_comments.comment_id', $comment->id)
-                        ->orderBy('sub_comments.created_at', 'desc')
-                        ->get();
-                    Arr::add($comment, 'sub_comment_count', count($sub_comment));
-                    Arr::add($comment, 'sub_comments', $sub_comment);
-                    $comment_count += count($sub_comment);
-                }
-            Arr::add($post, 'like_count', count($likes));
-            Arr::add($post, 'comment_count', $comment_count);
-            Arr::add($post, 'likes', $likes);
-            Arr::add($post, 'comments', $comments);
-        }
-        return $posts;
     }
     
     public function getPostForUser($param){
@@ -161,7 +187,35 @@ class PostService {
         } else {
             if(!$postID) return null;
             else {
-                $query = $query->where('posts.id', $postID);
+                $post = $query->where('posts.id', $postID)->first();
+                $comment_count = 0;
+                $likes = Like::join('users', 'likes.user_id', 'users.id')
+                    ->select('users.url', 'users.name as user_name', 'likes.created_at')
+                    ->where('likes.post_id', $post->id)
+                    ->where('likes.status', 1)
+                    ->orderBy('likes.created_at', 'desc')
+                    ->get();
+                $comments = Comment::join('users', 'comments.user_id', 'users.id')
+                    ->select('users.url', 'users.name as user_name', 'comments.content', 'comments.created_at')
+                    ->where('comments.post_id', $post->id)
+                    ->orderBy('comments.created_at', 'desc')
+                    ->get();
+                $comment_count += count($comments);
+                    foreach($comments as $comment){
+                        $sub_comment = Sub_Comment::join('users', 'sub_comments.user_id', 'users.id')
+                            ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'sub_comments.created_at')
+                            ->where('sub_comments.comment_id', $comment->id)
+                            ->orderBy('sub_comments.created_at', 'desc')
+                            ->get();
+                        Arr::add($comment, 'sub_comment_count', count($sub_comment));
+                        Arr::add($comment, 'sub_comments', $sub_comment);
+                        $comment_count += count($sub_comment);
+                    }
+                Arr::add($post, 'like_count', count($likes));
+                Arr::add($post, 'comment_count', $comment_count);
+                Arr::add($post, 'likes', $likes);
+                Arr::add($post, 'comments', $comments);
+                return $post;
             }
         }
 
@@ -194,6 +248,7 @@ class PostService {
             Arr::add($post, 'comment_count', $comment_count);
             Arr::add($post, 'likes', $likes);
             Arr::add($post, 'comments', $comments);
+            $comment_count = 0;
         }
         return $posts;
     }

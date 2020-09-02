@@ -1,7 +1,7 @@
 <template>
   <v-container class="grey lighten-5">
-    <fof v-if="!paramPost.data.length"></fof>
-    <post-component v-else :post="paramPost.data[0]"></post-component>
+    <fof v-if="!paramPost"></fof>
+    <post-component v-else :post="paramPost"></post-component>
   </v-container>
 </template>
 

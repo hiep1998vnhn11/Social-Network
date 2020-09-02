@@ -1,15 +1,15 @@
 <template>
 <v-container class="grey lighten-5">
-  <fof v-if="!paramUser.length"></fof>
+  <fof v-if="!paramUser"></fof>
   <div v-else>
     <v-row no-gutters>
       <v-card class="pa-2" outlined tile>
       <v-col md="8" offset-md="2">
-        <v-img height="300px" :src="paramUser[0].background"/>
+        <v-img height="300px" :src="paramUser.background"/>
       </v-col>
       <v-row justify="space-around" class="bocAvatar">
       <v-avatar size="150" class="avatar">
-        <img :src="paramUser[0].avatar" :alt="paramUser[0].name">
+        <img :src="paramUser.avatar" :alt="paramUser.name">
       </v-avatar>
         <v-tooltip bottom v-if="isCurrent">
           <template v-slot:activator="{ on, attrs }">
@@ -19,7 +19,8 @@
         </v-tooltip>
       </v-row>
       <v-col align="center">
-        <h1>{{paramUser[0].name}}</h1>
+        <h1>{{paramUser.name}}</h1>
+        <h1> {{ paramUser.id }}</h1>
       </v-col>
       </v-card> 
     </v-row>
@@ -31,6 +32,10 @@
       </v-col>
       <v-col cols="8" v-if="isCurrent && loggedIn">
         <create-post></create-post>
+        {{ paramUserPost }}
+        <div v-for="post in paramUserPost" :key="post.id">
+          <post-component :post="post"></post-component>
+        </div>
       </v-col>
     </v-row>
   </div>
@@ -42,6 +47,7 @@ import {mapGetters, mapActions} from 'vuex'
 import Fof from '@/views/404/Index'
 import CreatePost from '@/components/Post/CreatePost'
 import Cookies from 'js-cookie'
+import PostComponent from '@/components/Post/PostComponent'
 
 export default {
   data: () => ({
@@ -50,17 +56,19 @@ export default {
   metaInfo: { 
     title: 'UserProfile'
   },
-  computed: mapGetters(['paramUser', 'currentUser', 'loggedIn']),
+  computed: mapGetters(['paramUser', 'currentUser', 'loggedIn', 'paramUserPost']),
   components: {
     Fof,
-    CreatePost
+    CreatePost,
+    PostComponent
   },
   created(){
-    this.setUser(this.$route.params.url)
+    this.setUser( this.$route.params.url )
+    this.setPosts( this.paramUser.id )
     this.isCurrent = Cookies.get('user_url') === this.$route.params.url
   },
   methods: {
-    ...mapActions(['getParamUser']),
+    ...mapActions(['getParamUser', 'getParamUserPost']),
     setUser(url){
       let meta = {
         params: {
@@ -69,6 +77,15 @@ export default {
       }
       this.getParamUser( meta )
     },
+
+    setPosts(user_id){
+      let meta = {
+        params: {
+          user_id: user_id
+        }
+      }
+      this.getParamUserPost( meta )
+    }
   }
 }
 </script>

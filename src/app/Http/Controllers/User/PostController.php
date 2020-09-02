@@ -33,21 +33,10 @@ class PostController extends AppBaseController
             $data = $this->postService->getPostForGuest($request->all());
             return $this->sendResponse($data);
         } //guest
-        $isAdmin = 0;
-        $admins = DB::table('admin')->select('user_id')->get();
-        foreach($admins as $admin){
-            if(auth('api')->user()->id == $admin->user_id) $isAdmin = 1;
-        }
-
-        if($isAdmin){// Admin
-            $data = $this->postService->getPostForAdmin($request->all());
-            return $this->sendResponse($data);
-        } else {
+        else {
             $data = $this->postService->getPostForUser($request->all());
             return $this->sendResponse($data);
-        }
-        
-        
+        }     
     }
 
     public function get(Request $request)

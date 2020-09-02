@@ -55,7 +55,7 @@
       </v-tooltip>
       <v-tooltip bottom v-if="isLogin">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on" large to="/home"><v-icon>mdi-hexagon-slice-2</v-icon></v-btn>
+          <v-btn icon v-bind="attrs" v-on="on" large to="/"><v-icon>mdi-hexagon-slice-2</v-icon></v-btn>
         </template>
         <span>{{$t('common.go_home')}}</span>
       </v-tooltip>

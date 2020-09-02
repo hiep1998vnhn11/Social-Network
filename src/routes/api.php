@@ -27,8 +27,6 @@ Route::group([
 
 ], function ($router) {
     //auth
-
-
     Route::post('login', 'AuthController@login');
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
@@ -70,7 +68,7 @@ Route::group([
 
             //resource Post
             Route::post('create', 'User\PostController@create');
-            Route::delete('{post}/delete', 'User\PostController@delete');
+            Route::post('{post}/delete', 'User\PostController@delete');
             Route::post('{post}/edit', 'User\PostController@edit');
 
          

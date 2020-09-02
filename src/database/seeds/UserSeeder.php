@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
     {
         $i = 1;
         $role = Role::findById(1);
-        for($i; $i<=1000; $i++){
+        for($i; $i<=100; $i++){
             $user = Factory(App\User::class)->create([
                 'name' => Str::random(6),
                 'email' => 'bot'.$i.'@gmail.com',
@@ -27,6 +27,7 @@ class UserSeeder extends Seeder
                 'user_id' => $user->id,
                 'content' => Str::random(6) . ' ' . Str::random(5),
                 'visible' => 'public',
+                'imageUrl' => 'https://1.bp.blogspot.com/-phkS7CohUc4/W8FFai01w_I/AAAAAAAAMyw/vvNTx_cWOyQrFj4XicfTXkI5hIAdmJMfQCKgBGAs/s1600/Dragons-8.jpg'
             ]);
             $like = App\Models\Like::create([
                 'post_id' => $post->id,
@@ -39,8 +40,8 @@ class UserSeeder extends Seeder
             ]);
         };
 
-        for($j=1;$j<=900;$j++){
-            for($i=1;$i<=100;$i++){
+        for($j=1;$j<=22;$j++){
+            for($i=1;$i<=20;$i++){
                 App\Models\Message::create([
                     'sent_id' => $j,
                     'received_id' => $j+1,
