@@ -43,20 +43,20 @@ class PostService {
         $comment_count = 0;
         foreach($posts as $post){
             $likes = Like::join('users', 'likes.user_id', 'users.id')
-                ->select('users.url', 'users.name as user_name', 'likes.created_at')
+                ->select('users.url as user_url', 'users.avatar as user_avatar', 'users.name as user_name', 'likes.created_at')
                 ->where('likes.post_id', $post->id)
                 ->where('likes.status', 1)
                 ->orderBy('likes.created_at', 'desc')
                 ->get();
             $comments = Comment::join('users', 'comments.user_id', 'users.id')
-                ->select('users.url', 'users.name as user_name', 'comments.content', 'comments.created_at')
+                ->select('users.url as user_url', 'users.avatar as user_avatar', 'users.name as user_name', 'comments.content', 'comments.created_at')
                 ->where('comments.post_id', $post->id)
                 ->orderBy('comments.created_at', 'desc')
                 ->get();
             $comment_count += count($comments);
                 foreach($comments as $comment){
                     $sub_comment = Sub_Comment::join('users', 'sub_comments.user_id', 'users.id')
-                        ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'sub_comments.created_at')
+                        ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'users.url as user_url', 'users.avatar as user_avatar', 'sub_comments.created_at')
                         ->where('sub_comments.comment_id', $comment->id)
                         ->orderBy('sub_comments.created_at', 'desc')
                         ->get();
@@ -79,7 +79,7 @@ class PostService {
         $searchKey = Arr::get($param, 'search_key', null);
 
         $query = Post::join('users', 'posts.user_id', 'users.id')
-            ->select('posts.id', 'posts.user_id','users.name as user_name','users.url as user_url', 'users.avatar as user_avatar',
+            ->select('posts.id', 'posts.user_id','users.name as user_name','users.url as user_url', 
              'users.avatar as user_avatar', 'users.url as user_url', 'posts.content', 'posts.imageUrl', 'posts.visible', 'posts.created_at')
             ->where('posts.visible', 'public');
         
@@ -96,20 +96,20 @@ class PostService {
                 $comment_count = 0;
                 foreach($posts as $post){
                     $likes = Like::join('users', 'likes.user_id', 'users.id')
-                        ->select('users.url', 'users.name as user_name', 'likes.created_at')
+                        ->select('users.url as user_url', 'users.avatar as user_avatar','users.name as user_name', 'likes.created_at')
                         ->where('likes.post_id', $post->id)
                         ->where('likes.status', 1)
                         ->orderBy('likes.created_at', 'desc')
                         ->get();
                     $comments = Comment::join('users', 'comments.user_id', 'users.id')
-                        ->select('users.url', 'users.name as user_name', 'comments.content', 'comments.created_at')
+                        ->select('users.url as user_url', 'users.avatar as user_avatar', 'users.name as user_name', 'comments.content', 'comments.created_at')
                         ->where('comments.post_id', $post->id)
                         ->orderBy('comments.created_at', 'desc')
                         ->get();
                     $comment_count += count($comments);
                         foreach($comments as $comment){
                             $sub_comment = Sub_Comment::join('users', 'sub_comments.user_id', 'users.id')
-                                ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'sub_comments.created_at')
+                                ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'users.url as user_url', 'users.avatar as user_avatar', 'sub_comments.created_at')
                                 ->where('sub_comments.comment_id', $comment->id)
                                 ->orderBy('sub_comments.created_at', 'desc')
                                 ->get();
@@ -131,20 +131,20 @@ class PostService {
                 $post = $query->where('posts.id', $postID)->first();
                 $comment_count = 0;
                 $likes = Like::join('users', 'likes.user_id', 'users.id')
-                    ->select('users.url', 'users.name as user_name', 'likes.created_at')
+                    ->select('users.url as user_url', 'users.name as user_name', 'likes.created_at')
                     ->where('likes.post_id', $post->id)
                     ->where('likes.status', 1)
                     ->orderBy('likes.created_at', 'desc')
                     ->get();
                 $comments = Comment::join('users', 'comments.user_id', 'users.id')
-                    ->select('users.url', 'users.name as user_name', 'comments.content', 'comments.created_at')
+                    ->select('users.url as user_url', 'users.name as user_name', 'users.avatar as user_avatar', 'comments.content', 'comments.created_at')
                     ->where('comments.post_id', $post->id)
                     ->orderBy('comments.created_at', 'desc')
                     ->get();
                 $comment_count += count($comments);
                     foreach($comments as $comment){
                         $sub_comment = Sub_Comment::join('users', 'sub_comments.user_id', 'users.id')
-                            ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'sub_comments.created_at')
+                            ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'users.avatar as user_avatar', 'sub_comments.created_at')
                             ->where('sub_comments.comment_id', $comment->id)
                             ->orderBy('sub_comments.created_at', 'desc')
                             ->get();
@@ -190,20 +190,20 @@ class PostService {
                 $post = $query->where('posts.id', $postID)->first();
                 $comment_count = 0;
                 $likes = Like::join('users', 'likes.user_id', 'users.id')
-                    ->select('users.url', 'users.name as user_name', 'likes.created_at')
+                    ->select('users.url as user_url', 'users.avatar as user_avatar', 'users.name as user_name', 'likes.created_at')
                     ->where('likes.post_id', $post->id)
                     ->where('likes.status', 1)
                     ->orderBy('likes.created_at', 'desc')
                     ->get();
                 $comments = Comment::join('users', 'comments.user_id', 'users.id')
-                    ->select('users.url', 'users.name as user_name', 'comments.content', 'comments.created_at')
+                    ->select('users.url as user_url', 'users.name as user_name', 'users.avatar as user_avatar', 'comments.content', 'comments.created_at')
                     ->where('comments.post_id', $post->id)
                     ->orderBy('comments.created_at', 'desc')
                     ->get();
                 $comment_count += count($comments);
                     foreach($comments as $comment){
                         $sub_comment = Sub_Comment::join('users', 'sub_comments.user_id', 'users.id')
-                            ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'sub_comments.created_at')
+                            ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'users.url as user_url', 'users.avatar as user_avatar', 'sub_comments.created_at')
                             ->where('sub_comments.comment_id', $comment->id)
                             ->orderBy('sub_comments.created_at', 'desc')
                             ->get();
@@ -223,20 +223,20 @@ class PostService {
         $comment_count = 0;
         foreach($posts as $post){
             $likes = Like::join('users', 'likes.user_id', 'users.id')
-                ->select('users.url', 'users.name as user_name', 'likes.created_at')
+                ->select('users.url as user_url', 'users.name as user_name', 'likes.created_at')
                 ->where('likes.post_id', $post->id)
                 ->where('likes.status', 1)
                 ->orderBy('likes.created_at', 'desc')
                 ->get();
             $comments = Comment::join('users', 'comments.user_id', 'users.id')
-                ->select('users.url', 'users.name as user_name', 'comments.content', 'comments.created_at')
+                ->select('users.url as user_url', 'users.name as user_name', 'comments.content', 'comments.created_at')
                 ->where('comments.post_id', $post->id)
                 ->orderBy('comments.created_at', 'desc')
                 ->get();
             $comment_count += count($comments);
                 foreach($comments as $comment){
                     $sub_comment = Sub_Comment::join('users', 'sub_comments.user_id', 'users.id')
-                        ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'sub_comments.created_at')
+                        ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'users.avatar as user_avatar', 'sub_comments.created_at')
                         ->where('sub_comments.comment_id', $comment->id)
                         ->orderBy('sub_comments.created_at', 'desc')
                         ->get();
@@ -291,20 +291,20 @@ class PostService {
         $comment_count = 0;
         foreach($posts as $post){
             $likes = Like::join('users', 'likes.user_id', 'users.id')
-                ->select('users.url', 'users.name as user_name', 'likes.created_at')
+                ->select('users.url as user_url', 'users.name as user_name', 'likes.created_at')
                 ->where('likes.post_id', $post->id)
                 ->where('likes.status', 1)
                 ->orderBy('likes.created_at', 'desc')
                 ->get();
             $comments = Comment::join('users', 'comments.user_id', 'users.id')
-                ->select('users.url', 'users.name as user_name', 'comments.content', 'comments.created_at')
+                ->select('users.url as user_url', 'users.name as user_name', 'users.avatar as user_avatar', 'comments.content', 'comments.created_at')
                 ->where('comments.post_id', $post->id)
                 ->orderBy('comments.created_at', 'desc')
                 ->get();
             $comment_count += count($comments);
                 foreach($comments as $comment){
                     $sub_comment = Sub_Comment::join('users', 'sub_comments.user_id', 'users.id')
-                        ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'sub_comments.created_at')
+                        ->select('sub_comments.id', 'sub_comments.user_id', 'users.name as user_name', 'users.avatar as user_avatar', 'sub_comments.created_at')
                         ->where('sub_comments.comment_id', $comment->id)
                         ->orderBy('sub_comments.created_at', 'desc')
                         ->get();
@@ -331,7 +331,7 @@ class PostService {
         if($searchKey){
             $query = $query->where('users_name', 'like', '%'.$searchKey.'%');
         }
-        $likes = $query->select('posts.id as post_id', 'users.id as user_id', 'likes.id', 'users.name as user_name', 'likes.status')
+        $likes = $query->select('posts.id as post_id', 'users.id as user_id', 'likes.id', 'users.name as user_name', 'users.avatar as user_avatar', 'likes.status')
             ->orderBy('likes.created_at', 'desc')
             ->paginate($limit);
         return $likes;

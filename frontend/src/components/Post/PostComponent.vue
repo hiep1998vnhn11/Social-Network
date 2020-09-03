@@ -15,44 +15,14 @@
                 <div class="font-weight-black" :href="href" @click="navigate">{{ post.user_name }}</div>
               </router-link>
               <v-spacer></v-spacer>
-              <v-menu bottom offset-y >
+              <v-tooltip top class="text-body1">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" v-on="on" >
-                    <v-icon>mdi-dots-vertical</v-icon>
+                  <v-btn class="text-body1" v-bind="attrs" v-on="on" icon @click="deleteDialog = true">
+                    <v-icon color="primary">mdi-trash-can-outline</v-icon>
                   </v-btn>
                 </template>
-                <v-list>
-                  <v-list-item @click="deletePost">
-                    <v-list-item-icon> <v-icon>mdi-trash-can-outline</v-icon></v-list-item-icon>
-                    <v-list-item-title>Delete this post</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="deletePost">
-                    <v-list-item-icon> <v-icon>mdi-trash-can-outline</v-icon></v-list-item-icon>
-                    <v-list-item-title>Delete this post</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-              <v-menu>
-                <template v-slot:activator="{ on: menu, attrs }">
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on: tooltip }">
-                      <v-btn  v-bind="attrs" v-on="{ ...tooltip, ...menu }" icon>
-                        <v-icon>mdi-dots-vertical</v-icon>
-                      </v-btn>
-                    </template>
-                    <span>Option</span>
-                  </v-tooltip>
-                </template>
-                <v-list>
-                  <v-list-item
-                    v-for="(item, index) in items"
-                    :key="index"
-                    @click="deletePost"
-                  >
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
+                <span class="text-body1">Delete this post</span>
+              </v-tooltip>
             </v-list-item>
             <v-list-item-subtitle>
               {{ post.created_at }}
@@ -82,7 +52,7 @@
         <v-divider class="mx-4"></v-divider>
         <v-card-actions>
           <v-col cols=4>
-            <v-btn class="text-body-1" text block>
+            <v-btn class="text-body-1" text block @click="onLike">
               <v-icon >mdi-heart-outline</v-icon> 
               <span class="text-capitalize">{{$t('action.like')}} </span>
             </v-btn>
@@ -106,7 +76,7 @@
       <v-card>
         <v-toolbar>
             <v-btn icon @click="writeComment = false">
-            <v-icon color="dark">mdi-close</v-icon>
+              <v-icon color="dark">mdi-close</v-icon>
             </v-btn>
             <v-toolbar-title center>Comment to this post ...</v-toolbar-title>
         </v-toolbar>
@@ -114,26 +84,32 @@
           {{ post.comments }} 
           <v-row justify="space-around" v-for="comment in post.comments" :key="comment.id">
               <v-col cols='1'>
-                <v-avatar size="40">
-                  <img :src="comment.user_avatar" :alt="comment.user_name">
-                </v-avatar>
+                <router-link :to="{ name: 'User_profile', params: { url: comment.user_url }}" v-slot="{ href, navigate }">
+                  <v-avatar size=40>
+                    <img :src="comment.user_avatar" :alt="comment.user_name" @click="navigate" :href="href">
+                  </v-avatar>
+                </router-link>
               </v-col>
               <v-col cols='11'>
                 <v-card style="border-radius: 5px">
-                  <a style="color:black"><strong>{{ comment.user_name }}</strong></a>
-                  <br />
+                  <router-link :to="{ name: 'User_profile', params: { url: comment.user_url }}" v-slot="{ href, navigate }">
+                    <div class="font-weight-black" :href="href" @click="navigate">{{ comment.user_name }}</div>
+                  </router-link>
                    {{ comment.content }} 
                   <br />
                     <v-row justify="space-around" v-for="sub_comment in comment.sub_comments" :key="sub_comment.id">
                       <v-col cols='1'>
-                        <v-avatar size="40">
-                          <img :src="sub_comment.user_avatar" :alt="sub_comment.user_name">
-                        </v-avatar>
+                         <router-link :to="{ name: 'User_profile', params: { url: sub_comment.user_url }}" v-slot="{ href, navigate }">
+                          <v-avatar size=40>
+                            <img :src="comment.user_avatar" :alt="sub_comment.user_name" @click="navigate" :href="href">
+                          </v-avatar>
+                        </router-link>
                       </v-col>
                       <v-col cols='11'>
                         <v-card style="border-radius: 5px">
-                          <a style="color:black"><strong>{{ sub_comment.user_name }}</strong></a>
-                          <br />
+                          <router-link :to="{ name: 'User_profile', params: { url: sub_comment.user_url }}" v-slot="{ href, navigate }">
+                            <div class="font-weight-black" :href="href" @click="navigate">{{ sub_comment.user_name }}</div>
+                          </router-link>
                           {{ sub_comment.content }} 
                         </v-card>
                       </v-col>
@@ -166,12 +142,31 @@
         </v-container>  
         </v-card>
     </v-dialog>
+
+    <v-dialog v-model="deleteDialog" max-width="290">
+      <v-card>
+        <v-card-title class="headline">Delete Post?</v-card-title>
+        <v-card-text>
+          Do you want to delete this post?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="deleteDialog = false">
+            Disagree
+          </v-btn>
+          <v-btn color="green darken-1" text @click="deletePost">
+            Agree
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import Fof from '@/views/404/Index'
 import { mapGetters } from 'vuex'
+import axios from 'axios'
 
 export default {
     components: {
@@ -182,7 +177,7 @@ export default {
       return {
         writeComment: false,
         comment: '',
-        option: false,
+        deleteDialog: false,
       }
     },
     computed: mapGetters(['currentUser', 'loggedIn']),
@@ -190,8 +185,33 @@ export default {
       upload(){
         this.comment=''
       },
-      onComment(){
-        
+      async onComment(){
+        let url = `/auth/user/post/${this.post.id}/create_comment`
+        const response = await axios.post(url, {
+          content: this.comment
+        })
+        this.$swal({
+          icon: 'success',
+          text: response.data.message
+        })
+        this.writeComment = false
+      },
+      async deletePost(){
+        let url = `/auth/user/post/${this.post.id}/delete`
+        const response = await axios.post(url)
+        this.$swal({
+          icon: 'success',
+          text: response.data.message
+        })
+        this.deleteDialog = false
+      },
+      async onLike(){
+        let url = `/auth/user/post/${this.post.id}/handle_like`
+        const response = await axios.post(url)
+        this.$swal({
+          icon: 'success',
+          text: response.data.message
+        })
       }
     }
 

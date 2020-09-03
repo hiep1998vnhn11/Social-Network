@@ -22,7 +22,7 @@ class LikeController extends AppBaseController
     public function like(Post $post)
     {
         $success = 'Handle like successfully!';
-        if($post->visible = 'blocked') return $this->sendMessageFail('This post was blocked by admin!');
+        if($post->visible == 'blocked') return $this->sendMessageFail('This post was blocked by admin!');
 
         $isLiked = Like::where('user_id', auth('api')->user()->id)
             ->where('post_id', $post->id)

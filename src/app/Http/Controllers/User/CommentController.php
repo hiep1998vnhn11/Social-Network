@@ -21,7 +21,7 @@ class CommentController extends AppBaseController
     
     public function create(CommentRequest $request,Post $post)
     {
-        if($post->visible = 'blocked') return $this->sendMessageFail('This post was blocked by admin!');
+        if($post->visible == 'blocked') return $this->sendMessageFail('This post was blocked by admin!');
         $comment = new Comment();
         $comment->post_id = $post->id;
         $comment->user_id = auth('api')->user()->id;
