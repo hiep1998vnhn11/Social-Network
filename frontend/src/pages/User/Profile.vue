@@ -20,7 +20,6 @@
       </v-row>
       <v-col align="center">
         <h1>{{paramUser.name}}</h1>
-        <h1> {{ paramUser.id }}</h1>
       </v-col>
       </v-card> 
     </v-row>
@@ -32,7 +31,6 @@
       </v-col>
       <v-col cols="8" v-if="isCurrent && loggedIn">
         <create-post></create-post>
-        {{ paramUserPost }}
         <div v-for="post in paramUserPost" :key="post.id">
           <post-component :post="post"></post-component>
         </div>
@@ -51,7 +49,8 @@ import PostComponent from '@/components/Post/PostComponent'
 
 export default {
   data: () => ({
-    isCurrent: false
+    isCurrent: false,
+    isGet: false,
   }),
   metaInfo: { 
     title: 'UserProfile'
@@ -62,9 +61,11 @@ export default {
     CreatePost,
     PostComponent
   },
-  created(){
+  beforeCreate(){
+  },
+  created: function(){
     this.setUser( this.$route.params.url )
-    this.setPosts( this.paramUser.id )
+    this.setPosts( this.$route.params.url )
     this.isCurrent = Cookies.get('user_url') === this.$route.params.url
   },
   methods: {
@@ -78,10 +79,10 @@ export default {
       this.getParamUser( meta )
     },
 
-    setPosts(user_id){
+    setPosts(url){
       let meta = {
         params: {
-          user_id: user_id
+          user_url: url
         }
       }
       this.getParamUserPost( meta )

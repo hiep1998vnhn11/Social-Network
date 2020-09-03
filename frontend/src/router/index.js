@@ -13,6 +13,7 @@ import Message from '@/pages/Message/Message'
 import MyProfile from '@/pages/User/MyProfile'
 import History from '@/components/Navbar/History'
 import Test from '@/components/Test'
+import ProfileTest from '@/pages/User/ProfileTest'
 
 Vue.use(VueRouter)
 
@@ -32,6 +33,8 @@ Vue.use(VueRouter)
       requiresVisitor: true
     }},
     { path: '/user/:url', name: 'User_profile', component: Profile
+    },
+    { path: '/user_test/:url', name: 'User_profile_test', component: ProfileTest
     },
     {
       path: '/post/:post_id', name: 'Param_Post', component: Post

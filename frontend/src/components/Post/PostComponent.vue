@@ -53,7 +53,8 @@
         <v-card-actions>
           <v-col cols=6>
             <v-btn class="text-body-1" text block @click="onLike">
-              <v-icon >mdi-heart-outline</v-icon> 
+              <v-icon v-if="!post.is_like">mdi-heart-outline</v-icon> 
+              <v-icon v-else color="primary">mdi-heart</v-icon>
               <span class="text-capitalize">{{$t('action.like')}} </span>
             </v-btn>
           </v-col>
@@ -176,6 +177,7 @@ export default {
       comment: '',
       deleteDialog: false,
       socket: null,
+      isLike: false
     }
   },
   computed: mapGetters(['currentUser', 'loggedIn']),
@@ -227,20 +229,27 @@ export default {
     },
     async deletePost(){
       let url = `/auth/user/post/${this.post.id}/delete`
-      const response = await axios.post(url)
-      this.$swal({
-        icon: 'success',
-        text: response.data.message
-      })
+      try{
+        const response = await axios.post(url)
+        this.$swal({
+          icon: 'success',
+          text: response.data.message
+        })
+      } catch {
+        this.$swal({
+          icon: 'error',
+          text: 'Permission denied'
+        })
+      } 
       this.deleteDialog = false
     },
     async onLike(){
+      this.post.is_like = !this.post.is_like
+      if(!this.post.is_like){ // handle unlike
+        this.post.like_count -= 1
+      } else this.post.like_count += 1
       let url = `/auth/user/post/${this.post.id}/handle_like`
-      const response = await axios.post(url)
-      this.$swal({
-        icon: 'success',
-        text: response.data.message
-      })
+      await axios.post(url) 
     }
   }
 }
