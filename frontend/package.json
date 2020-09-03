@@ -6,14 +6,19 @@
     "serve": "vue-cli-service serve --port=3000",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "postversion": "node scripts/postversion.js"
+    "postversion": "node scripts/postversion.js",
+    "socket": "nodemon socket/server"
   },
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
+    "express": "^4.17.1",
     "js-cookie": "^2.2.1",
     "luxon": "^1.24.1",
     "moment": "^2.27.0",
+    "nodemon": "^2.0.4",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",
     "vue-datetime": "^1.0.0-beta.14",

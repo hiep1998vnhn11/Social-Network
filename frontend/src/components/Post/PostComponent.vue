@@ -51,37 +51,30 @@
         </v-row>
         <v-divider class="mx-4"></v-divider>
         <v-card-actions>
-          <v-col cols=4>
+          <v-col cols=6>
             <v-btn class="text-body-1" text block @click="onLike">
               <v-icon >mdi-heart-outline</v-icon> 
               <span class="text-capitalize">{{$t('action.like')}} </span>
             </v-btn>
           </v-col>
-          <v-col cols=4>
-            <v-btn class="text-capitalize" text block @click="writeComment = true">
+          <v-col cols=6>
+            <v-btn class="text-capitalize" text block @click="openCommentDialog">
               <v-icon>mdi-comment-outline</v-icon>
               {{$t('action.comment')}}
-            </v-btn> 
-          </v-col>
-          <v-col cols=4>
-            <v-btn text block class="text-capitalize">
-              <v-icon>mdi-share-variant-outline</v-icon>
-              {{$t('action.share')}}
             </v-btn> 
           </v-col>
         </v-card-actions>
       </v-card>
     </div>
-    <v-dialog v-model="writeComment" hide-overlay max-width="1000px">
+    <v-dialog v-model="writeComment" persistent hide-overlay max-width="1000px">
       <v-card>
         <v-toolbar>
-            <v-btn icon @click="writeComment = false">
+            <v-btn icon @click="closeCommentDialog">
               <v-icon color="dark">mdi-close</v-icon>
             </v-btn>
             <v-toolbar-title center>Comment to this post ...</v-toolbar-title>
         </v-toolbar>
         <v-container> 
-          {{ post.comments }} 
           <v-row justify="space-around" v-for="comment in post.comments" :key="comment.id">
               <v-col cols='1'>
                 <router-link :to="{ name: 'User_profile', params: { url: comment.user_url }}" v-slot="{ href, navigate }">
@@ -97,6 +90,7 @@
                   </router-link>
                    {{ comment.content }} 
                   <br />
+                  <div v-if="comment.sub_comment_count">
                     <v-row justify="space-around" v-for="sub_comment in comment.sub_comments" :key="sub_comment.id">
                       <v-col cols='1'>
                          <router-link :to="{ name: 'User_profile', params: { url: sub_comment.user_url }}" v-slot="{ href, navigate }">
@@ -113,7 +107,8 @@
                           {{ sub_comment.content }} 
                         </v-card>
                       </v-col>
-                  </v-row>
+                    </v-row>
+                  </div>
                 </v-card>
               </v-col>
           </v-row>
@@ -167,53 +162,86 @@
 import Fof from '@/views/404/Index'
 import { mapGetters } from 'vuex'
 import axios from 'axios'
+import io from 'socket.io-client'
+const ENDPOINT = 'localhost:6001'
 
 export default {
-    components: {
-        Fof,
+  components: {
+    Fof,
+  },
+  props: ['post'],
+  data: () => {
+    return {
+      writeComment: false,
+      comment: '',
+      deleteDialog: false,
+      socket: null,
+    }
+  },
+  computed: mapGetters(['currentUser', 'loggedIn']),
+  methods: {
+    upload(){
+      this.comment=''
     },
-    props: ['post'],
-    data: () => {
-      return {
-        writeComment: false,
-        comment: '',
-        deleteDialog: false,
+    openCommentDialog(){
+      this.writeComment = true
+      if(this.loggedIn){
+        this.socket = io(ENDPOINT)
+      }
+      this.socket.on('receivedComment', (data) => {
+        const commentReceived = data.response.data.data
+        Object.assign(commentReceived, {
+          user_url: data.user.url,
+          user_avatar: data.user.avatar,
+          user_name: data.user.name,
+          sub_comment_count: 0
+        })
+        this.post.comments.unshift(commentReceived)
+      })
+    },
+    closeCommentDialog(){
+      this.writeComment = false
+      if(this.loggedIn){
+        this.socket.close()
       }
     },
-    computed: mapGetters(['currentUser', 'loggedIn']),
-    methods: {
-      upload(){
-        this.comment=''
-      },
-      async onComment(){
+    async onComment(){
+      if(!this.comment){
+        this.$swal({
+          icon: 'info',
+          text: 'Content is required!'
+        })
+      } else {
         let url = `/auth/user/post/${this.post.id}/create_comment`
-        const response = await axios.post(url, {
+        let response = await axios.post(url, {
           content: this.comment
         })
-        this.$swal({
-          icon: 'success',
-          text: response.data.message
+        await this.socket.emit('comment', {
+          user: this.currentUser,
+          response: response,
+          comment: this.comment
         })
-        this.writeComment = false
-      },
-      async deletePost(){
-        let url = `/auth/user/post/${this.post.id}/delete`
-        const response = await axios.post(url)
-        this.$swal({
-          icon: 'success',
-          text: response.data.message
-        })
-        this.deleteDialog = false
-      },
-      async onLike(){
-        let url = `/auth/user/post/${this.post.id}/handle_like`
-        const response = await axios.post(url)
-        this.$swal({
-          icon: 'success',
-          text: response.data.message
-        })
+        this.comment = ''
+        response = null
       }
+    },
+    async deletePost(){
+      let url = `/auth/user/post/${this.post.id}/delete`
+      const response = await axios.post(url)
+      this.$swal({
+        icon: 'success',
+        text: response.data.message
+      })
+      this.deleteDialog = false
+    },
+    async onLike(){
+      let url = `/auth/user/post/${this.post.id}/handle_like`
+      const response = await axios.post(url)
+      this.$swal({
+        icon: 'success',
+        text: response.data.message
+      })
     }
-
+  }
 }
 </script>
