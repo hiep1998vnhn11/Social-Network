@@ -16,8 +16,13 @@ io.on('connection', function(socket){
     })
 
     socket.on('comment', function(data){
-        console.log(`A client comment an data: ${data}`)
-        io.emit('receivedComment', data)
+        console.log(`Username ${data.user.name} has just commented!`)
+        socket.broadcast.emit('receivedComment', data)  
+    })
+
+    socket.on('like', function(data){
+        console.log(`Username ${data.user.name} has just liked a post`)
+        socket.broadcast.emit('liked', data)
     })
 
     socket.on('disconnect', function(){

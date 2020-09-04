@@ -29,10 +29,12 @@
           .col-4
         </v-card>
       </v-col>
-      <v-col cols="8" v-if="isCurrent && loggedIn">
-        <create-post></create-post>
+      <v-col cols="8">
+        <create-post  v-if="isCurrent && loggedIn"></create-post>
+        <br v-if="isCurrent && loggedIn" />
         <div v-for="post in paramUserPost" :key="post.id">
           <post-component :post="post"></post-component>
+          <br />
         </div>
       </v-col>
     </v-row>
@@ -98,7 +100,7 @@ export default {
 .avatar {
   position: absolute;
   top: -150px;
-  z-index: 10;
+  z-index: 2;
 
 }
 </style>

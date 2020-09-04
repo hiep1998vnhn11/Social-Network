@@ -175,7 +175,7 @@ class PostService {
         $postID = Arr::get($param, 'post_id', null);
         $searchKey = Arr::get($param, 'search_key', null);
         $isLike = false;
-        if(!$userID){
+        if(!$userID && !$postID){
             $user = User::where('url', $userUrl)->first();
             $userID = $user->id;
         }
@@ -272,6 +272,7 @@ class PostService {
             Arr::add($post, 'likes', $likes);
             Arr::add($post, 'comments', $comments);
             $comment_count = 0;
+            $isLike = false;
         }
         return $posts;
     }

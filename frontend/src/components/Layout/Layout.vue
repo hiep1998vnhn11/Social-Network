@@ -2,6 +2,17 @@
 <div>
     <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" app>
       <v-list dense>
+          <v-list-item two-line v-if="isLogin">
+            <v-list-item-avatar>
+              <img :src="currentUser.avatar">
+            </v-list-item-avatar>
+
+            <v-list-item-content>
+              <v-list-item-title class="text-capitalize">{{ currentUser.name }}</v-list-item-title>
+              <v-list-item-subtitle>Logged In</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        <v-divider></v-divider>
         <template v-for="item in items">  
           <v-list-item v-if="isLogin || item.auth" :key="item.text" :to="item.link" link>
             <v-list-item-action>

@@ -189,17 +189,17 @@ export default {
       this.writeComment = true
       if(this.loggedIn){
         this.socket = io(ENDPOINT)
-      }
-      this.socket.on('receivedComment', (data) => {
-        const commentReceived = data.response.data.data
-        Object.assign(commentReceived, {
-          user_url: data.user.url,
-          user_avatar: data.user.avatar,
-          user_name: data.user.name,
-          sub_comment_count: 0
+        this.socket.on('receivedComment', (data) => {
+          const commentReceived = data.response.data.data
+          Object.assign(commentReceived, {
+            user_url: data.user.url,
+            user_avatar: data.user.avatar,
+            user_name: data.user.name,
+            sub_comment_count: 0
+          })
+          this.post.comments.unshift(commentReceived)
         })
-        this.post.comments.unshift(commentReceived)
-      })
+      }
     },
     closeCommentDialog(){
       this.writeComment = false
@@ -218,6 +218,14 @@ export default {
         let response = await axios.post(url, {
           content: this.comment
         })
+        const currentComment = response.data.data
+        Object.assign(currentComment, {
+            user_url: this.currentUser.url,
+            user_avatar: this.currentUser.avatar,
+            user_name: this.currentUser.name,
+            sub_comment_count: 0
+        })
+        this.post.comments.unshift(currentComment)
         await this.socket.emit('comment', {
           user: this.currentUser,
           response: response,

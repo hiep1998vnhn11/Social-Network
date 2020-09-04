@@ -13,6 +13,7 @@ import Message from '@/pages/Message/Message'
 import MyProfile from '@/pages/User/MyProfile'
 import History from '@/components/Navbar/History'
 import Test from '@/components/Test'
+import MessageComponent from '@/components/Message/MessageComponent'
 
 Vue.use(VueRouter)
 
@@ -39,7 +40,11 @@ Vue.use(VueRouter)
     {
       path: '/message', name: 'Message', component: Message, meta: {
         requiresAuth: true
-      }
+      }, children: [
+        {
+          path:'with/:url', name: 'MessageUser', component: MessageComponent
+        }
+      ]
     },
     {
       path: '/myprofile', name: 'MyProfile', component: MyProfile, meta: {
