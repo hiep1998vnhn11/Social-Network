@@ -16,22 +16,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('get_users', 'User\UserController@getForClient');
 Route::get('get_posts', 'User\PostController@getForClient');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::group([
-
     'middleware' => 'api',
     'prefix' => 'auth'
-
 ], function ($router) {
     //auth
     Route::post('login', 'AuthController@login');
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
-    Route::post('change_url', 'User\UserController@changeUrl');
 
     //message
     Route::get('get_messages', 'User\MessageController@getForAuth');
@@ -47,6 +40,11 @@ Route::group([
         Route::get('get', 'User\UserController@get');
         Route::get('{user}/get_info', 'User\UserController@getInfoByUserId');
         Route::get('{user}/get_post', 'User\PostController@getPostByUserId');
+
+        Route::post('change_url', 'User\UserController@changeUrl');
+        Route::post('change_avatar', 'User\UserController@changeAvatar');
+        Route::post('change_background', 'User\UserController@changeBackground');
+        Route::post('change_info', 'User\UserController@changeInfo');
 
            //resource Message
         Route::post('{user}/send_message', 'User\MessageController@send');

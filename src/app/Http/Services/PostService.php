@@ -69,6 +69,8 @@ class PostService {
             Arr::add($post, 'comment_count', $comment_count);
             Arr::add($post, 'likes', $likes);
             Arr::add($post, 'comments', $comments);
+
+            $comment_count = 0;
         }
         return $posts;
         
@@ -231,6 +233,8 @@ class PostService {
                 Arr::add($post, 'comment_count', $comment_count);
                 Arr::add($post, 'likes', $likes);
                 Arr::add($post, 'comments', $comments);
+
+                $comment_count = 0;
                 return $post;
             }
         }
@@ -251,7 +255,7 @@ class PostService {
                     } 
                 }
             $comments = Comment::join('users', 'comments.user_id', 'users.id')
-                ->select('users.url as user_url', 'users.name as user_name', 'comments.content', 'comments.created_at')
+                ->select('users.url as user_url', 'users.name as user_name', 'users.avatar as user_avatar','comments.content', 'comments.created_at')
                 ->where('comments.post_id', $post->id)
                 ->orderBy('comments.created_at', 'desc')
                 ->get();

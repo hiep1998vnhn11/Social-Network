@@ -57,14 +57,54 @@ class UserController extends AppBaseController
 
     public function changeUrl(Request $request)
     {
-        $validatedRequest = $request->validate([
+        $request->validate([
             'url' => 'required|unique:users,url|min:3|max:35'
         ]);
-        if(Str::contains($request->url, 'admin') || $validatedRequest){
+
+        if(Str::contains($request->url, 'admin')){
             return $this->sendMessageFail('url is not validation ...');
         }
         $user = auth('api')->user();
         $user->url = $request->url;
+        $user->save();
+        return $this->sendMessageSuccess($user, 'Change url successfully!');
+    }
+
+    public function changeAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => 'required|max:255'
+        ]);
+
+        $user = auth('api')->user();
+        $user->avatar = $request->avatar;
+        $user->save();
+        return $this->sendMessageSuccess($user, 'Change url successfully!');
+    }
+
+    public function changeBackground(Request $request)
+    {
+        $request->validate([
+            'background' => 'required|max:255'
+        ]);
+
+        $user = auth('api')->user();
+        $user->background = $request->avatar;
+        $user->save();
+        return $this->sendMessageSuccess($user, 'Change url successfully!');
+    }
+
+    public function changeInfo(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|min:3|max:55'
+        ]);
+
+        if(Str::contains($request->name, 'admin')){
+            return $this->sendMessageFail('name is not validation ...');
+        }
+        $user = auth('api')->user();
+        $user->name = $request->name;
         $user->save();
         return $this->sendMessageSuccess($user, 'Change url successfully!');
     }

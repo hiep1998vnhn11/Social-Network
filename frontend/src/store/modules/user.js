@@ -72,20 +72,12 @@ const actions = {
     },
 
     async register(context, data){
-        const authRegister = await axios.post('/register', {
+        await axios.post('/register', {
             name: data.name,
             email: data.email,
             password: data.password,
             password_confirmation: data.password_confirmation
         })
-        console.log(authRegister.data.message)
-    },
-
-    async deleteUser(context, idUser){
-        context.state.setHeader()
-        const deleteUserApi = await axios.post(`/admin/delete/${idUser}`)
-        console.log(deleteUserApi.data)
-        context.commit('REMOVE_USER', idUser)
     },
 
     destroyToken(context){
@@ -127,7 +119,7 @@ const mutations = {
     SET_USER: (state, users) => (state.users = users),
     SET_SOCKET: (state,socket) => (state.socket = socket), 
     SET_PARAM_USER: (state, paramUser) => (state.paramUser = paramUser),
-    REMOVE_USER: (state, idUser) => state.users = state.users.filter(users=>users.id!=idUser)
+    REMOVE_USER: (state, idUser) => state.users = state.users.filter(users => users.id!=idUser)
 }
 export default{
     state,

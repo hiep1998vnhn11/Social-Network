@@ -251,6 +251,22 @@ export default {
       } 
       this.deleteDialog = false
     },
+
+    async deleteComment(){
+      let url = `/auth/user/post/${this.post.id}/12/delete`
+      try{
+        const response = await axios.post(url)
+        this.$swal({
+          icon: 'success',
+          text: response.data.message
+        })
+      } catch {
+        this.$swal({
+          icon: 'error',
+          text: 'Permission denied!'
+        })
+      }
+    },
     async onLike(){
       this.post.is_like = !this.post.is_like
       if(!this.post.is_like){ // handle unlike

@@ -46,22 +46,14 @@ class CommentController extends AppBaseController
         return $this->sendMessageSuccess($comment, $success);
     }
 
-    public function delete(Comment $comment)
+    public function delete(Post $post, Comment $comment)
     {
         $fail='Delete comment fail';
         $success='Delete comment successfully';
-        if($comment->user_id != auth('api')->user()->id)
+        if($comment->user_id != auth('api')->user()->id | $comment->post_id != $post->id)
             return $this->sendMessageFail($fail);
 
         $comment->delete();
         return $this->sendMessageSuccess($comment, $success);
-    }
-
-    public function get(Request $request,Post $post)
-    {
-        if($post->visible = 'blocked') return $this->sendMessageFail('This post was blocked by admin!');
-
-        $data = $this->postService->getComment($request->all(), $post->id);
-        return $this->sendResponse($data);
     }
 }
