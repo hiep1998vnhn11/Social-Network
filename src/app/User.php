@@ -42,23 +42,23 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     public function posts(){
-        return $this->hasMany('App\Post', 'user_id', 'id');
+        return $this->hasMany('App\Models\Post', 'user_id', 'id');
     }
 
     public function likes(){
-        return $this->hasMany('App\Like', 'user_id', 'id');
-    }
-
-    public function messagesSent(){
-        return $this->hasMany('App\Message', 'sent_id', 'id');
-    }
-
-    public function messagesReceived(){
-        return $this->hasMany('App\Message', 'received_id', 'id');
+        return $this->hasMany('App\Models\Like', 'user_id', 'id');
     }
 
     public function sub_comment(){
-        return $this->hasMany('App\Sub_Comment', 'user_id', 'id');
+        return $this->hasMany('App\Models\Sub_Comment', 'user_id', 'id');
+    }
+
+    public function room_sent(){
+        return $this->hasMany('App\Models\Room', 'sent', 'id');
+    }
+
+    public function room_to(){
+        return $this->hasMany('App\Models\Room', 'to', 'id');
     }
 
     public function getJWTIdentifier()

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAdminTable extends Migration
+class CreateMessageRoomsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateAdminTable extends Migration
      */
     public function up()
     {
-        Schema::create('admin', function (Blueprint $table) {
+        Schema::create('message_rooms', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('sent');
+            $table->unsignedBigInteger('to');
+            $table->foreign('sent')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('to')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreateAdminTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admin');
+        Schema::dropIfExists('message_rooms');
     }
 }
