@@ -40,14 +40,5 @@ class UserSeeder extends Seeder
             ]);
         };
 
-        for($j=1;$j<=22;$j++){
-            for($i=1;$i<=20;$i++){
-                App\Models\Message::create([
-                    'sent_id' => $j,
-                    'received_id' => $j+1,
-                    'content' => Str::random(5)
-                ]);
-            }
-        }
     }
 }
