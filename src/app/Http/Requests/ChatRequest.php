@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ChangeProfileRequest extends FormRequest
+class ChatRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class ChangeProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:4|max:35',
+            'content' => 'required|max:500',
         ];
     }
 }

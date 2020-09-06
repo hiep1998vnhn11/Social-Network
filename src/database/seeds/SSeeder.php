@@ -50,13 +50,6 @@ class SSeeder extends Seeder
  
  
          // create demo users
-         $user = Factory(App\User::class)->create([
-             'name' => 'hiep',
-             'email' => 'hiep@gmail.com',
-             'password' => bcrypt('123456'),
-             'url' => 'hiep'
-         ]);
-         $user->assignRole($role1);
  
          $user = Factory(App\User::class)->create([
              'name' => 'admin',
@@ -73,6 +66,14 @@ class SSeeder extends Seeder
              'password' => bcrypt('admin'),
          ]);
          $user->assignRole($role3);
+
+         $user = Factory(App\User::class)->create([
+            'name' => 'hiep',
+            'email' => 'hiep@gmail.com',
+            'password' => bcrypt('123456'),
+            'url' => 'hiep'
+        ]);
+        $user->assignRole($role1);
  
          $user = Factory(App\User::class)->create([
              'name' => 'blocked',

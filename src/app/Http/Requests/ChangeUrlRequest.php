@@ -24,7 +24,7 @@ class ChangeUrlRequest extends FormRequest
     public function rules()
     {
         return [
-            'url' => 'unique:users,url|min:1|max:35',
+            'url' => 'required|unique:users,url|min:1|max:35',
         ];
     }
 }

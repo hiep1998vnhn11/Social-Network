@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
         //Hello cac
         $this->call(SSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(ChatSeeder::class);
     }
 }

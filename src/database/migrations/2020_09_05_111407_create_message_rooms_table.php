@@ -15,10 +15,10 @@ class CreateMessageRoomsTable extends Migration
     {
         Schema::create('message_rooms', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('sent');
-            $table->unsignedBigInteger('to');
-            $table->foreign('sent')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('to')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('with_id');
+            $table->foreign('with_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

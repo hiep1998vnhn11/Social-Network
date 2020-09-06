@@ -47,11 +47,23 @@ Route::group([
         Route::post('change_info', 'User\UserController@changeInfo');
 
            //resource Message
-        Route::post('{user}/send_message', 'User\MessageController@send');
         Route::get('/get_message', 'User\MessageController@get');
         Route::post('{user}/{message}/edit', 'User\MessageController@edit');
         Route::delete('{user}/{message}/delete', 'User\MessageController@delete');
         Route::get('/test_message', 'User\MessageController@test');
+
+        //Chats
+        Route::delete('{room}/delete', 'User\ChatController@deleteRoom');
+        Route::post('rooms', 'User\ChatController@getRoom');
+        Route::post('messages', 'User\ChatController@getMessage');
+
+        Route::post('{user}/send_message', 'User\ChatController@send');
+        Route::post('message/{chat}/delete_your_side', 'User\ChatController@deleteChatOnYourSide');
+        Route::post('message/{chat}/delete', 'User\ChatController@deleteChat');
+        Route::post('room/{room}/delete_your_side', 'User\ChatController@deleteRoomOnYourSide');
+        Route::post('room/{room}/delete', 'User\ChatController@deleteRoom');
+
+        Route::post('room/{room}/get','User\ChatController@getChatOnRoom');
 
         //group prefix post
         Route::group([

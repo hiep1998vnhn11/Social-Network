@@ -157,6 +157,7 @@ import Fof from '@/views/404/Index'
 import CreatePost from '@/components/Post/CreatePost'
 import Cookies from 'js-cookie'
 import PostComponent from '@/components/Post/PostComponent'
+import axios from 'axios'
 
 export default {
   data: () => ({
@@ -226,19 +227,27 @@ export default {
       }
       this.previewDialog = true
     },
-    onChangeAvatar(){
-      
+    async onChangeAvatar(){
+      const url = `auth/user/change_avatar`
+      let request = { avatar: this.avatar }
+      const response = await axios.post(url, request)
+      console.log(response)
+
       this.avatar = null
       this.avatarDialog = false
     },
-    onChangeBackground(){
+    async onChangeBackground(){
+      const url = `auth/user/change_background`
+      let request = { background: this.background }
+      const response = await axios.post(url, request)
+      console.log(response)
 
       this.background = null
       this.backgroundDialog = false
     },
     onChangeInfo(){
 
-    }
+    },
   }
 }
 </script>

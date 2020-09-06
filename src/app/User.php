@@ -53,12 +53,12 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany('App\Models\Sub_Comment', 'user_id', 'id');
     }
 
-    public function room_sent(){
-        return $this->hasMany('App\Models\Room', 'sent', 'id');
+    public function room(){
+        return $this->hasMany('App\Models\Room');
     }
 
-    public function room_to(){
-        return $this->hasMany('App\Models\Room', 'to', 'id');
+    public function with_room(){
+        return $this->hasMany('App\Models\Room', 'with_id', 'id');
     }
 
     public function getJWTIdentifier()

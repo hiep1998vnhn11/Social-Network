@@ -12,4 +12,8 @@ class Chat extends Model
         return $this->belongsTo('App\Models\Room', 'room_id');
     }
 
+    public function sent(){
+        return $this->belongsTo('App\User', 'sent_id');
+    }
+
 }
