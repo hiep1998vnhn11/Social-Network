@@ -36,14 +36,27 @@ const actions = {
         state.setHeader()
         let url = '/get_posts'
         const response = await axios.get(url, payload)
-        commit('SET_PARAM_USER_POST', response.data.data.data)
+        commit('SET_PARAM_USER_POST', response.data.data)
+    },
+    async createPost({commit}, payload) {
+        const url = "/auth/user/post/create";
+        const response = await axios.post(url, payload)
+        commit('CREATE_POST', response.data.data)    
+    },
+    async deletePost( {commit}, payload){
+        const url = `/auth/user/post/${payload.post_id}/delete`
+        const response = await axios.post(url)
+        console.log(response)
+        commit('DELETE_POST', payload.post_id)
     }
 }
 
 const mutations = {
     SET_POST: (state, posts) => state.posts = posts,
     SET_PARAM_POST: (state, paramPost) => state.paramPost = paramPost,
-    SET_PARAM_USER_POST: (state, paramUserPost) => state.paramUserPost = paramUserPost
+    SET_PARAM_USER_POST: (state, paramUserPost) => state.paramUserPost = paramUserPost,
+    CREATE_POST: (state, post) => state.posts.data.unshift(post),
+    DELETE_POST: (state, postId) => state.posts.data = state.posts.data.filter( data =>  data.id != postId)
 }
 
 export default {

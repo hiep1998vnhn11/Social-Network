@@ -40,7 +40,7 @@ class PostService {
             });
         }
 
-        $posts = $query->orderBy('posts.created_at', 'desc')->paginate($limit);
+        $posts = $query->orderBy('posts.created_at', 'desc')->get();
         $comment_count = 0;
         foreach($posts as $post){
             $likes = Like::join('users', 'likes.user_id', 'users.id')
@@ -79,10 +79,11 @@ class PostService {
         $limit     = Arr::get($param, 'limit', Consts::DEFAULT_PER_PAGE);
         $userID    = Arr::get($param, 'user_id', null);
         $postID    = Arr::get($param, 'post_id', null);
-        $userUrl = Arr::get($param, 'user_url', null);
+        $userUrl   = Arr::get($param, 'user_url', null);
         $searchKey = Arr::get($param, 'search_key', null);
 
         if(!$userID){
+            if(!$userUrl) return null;
             $user = User::where('url', $userUrl)->first();
             $userID = $user->id;
         }
@@ -101,7 +102,7 @@ class PostService {
                         $q->where('posts.content', 'like', '%' . $searchKey . '%');
                     });
                 }
-                $posts = $query->orderBy('posts.created_at', 'desc')->paginate($limit);
+                $posts = $query->orderBy('posts.created_at', 'desc')->get();
                 $comment_count = 0;
                 foreach($posts as $post){
                     $likes = Like::join('users', 'likes.user_id', 'users.id')
@@ -239,7 +240,7 @@ class PostService {
             }
         }
 
-        $posts = $query->orderBy('posts.created_at', 'desc')->paginate($limit);
+        $posts = $query->orderBy('posts.created_at', 'desc')->get();
         $comment_count = 0;
 
         foreach($posts as $post){

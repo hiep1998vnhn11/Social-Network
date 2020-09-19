@@ -16,34 +16,17 @@
                         <span>New Chat</span>
                     </v-tooltip>
                 </div>
-
-                <v-autocomplete
-                    v-model="select"
-                    :loading="loading"
-                    :items="items.title"
-                    :search-input.sync="search"
-                    cache-items
-                    flat
-                    hide-no-data
-                    hide-details
-                    label="Search for Message"
-                    solo-inverted
-                    ></v-autocomplete>
                     
                 <v-divider></v-divider>
 
                 <v-list dense>
-                    <v-list-item
-                    v-for="item in items"
-                    :key="item.title"
-                    link
-                    >
+                    <v-list-item v-for="room in rooms" :key="room.id" link :to="{ name: 'MessageUser', params: { room_id: room.id }}">
                     <v-list-item-icon>
-                        <v-icon>{{ item.icon }}</v-icon>
+                        <v-avatar height=30px width=30px><img :src="room.avatar" :alt="room.name" /></v-avatar>
                     </v-list-item-icon>
 
                     <v-list-item-content>
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        <v-list-item-title>{{ room.name }}</v-list-item-title>
                     </v-list-item-content>
                     </v-list-item>
                 </v-list>
@@ -56,6 +39,8 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
     data () {
       return {
@@ -65,5 +50,20 @@ export default {
         ],
       }
     },
+    computed: mapGetters(['rooms']),
+    created: async function(){
+        if(!this.rooms.length)
+        try{
+            await this.getRoom()
+        } catch(err){
+            console.log(err)
+        }
+    },
+    methods: {
+        ...mapActions(['getRoom']),
+        search(){
+            
+        }
+    }
 }
 </script>

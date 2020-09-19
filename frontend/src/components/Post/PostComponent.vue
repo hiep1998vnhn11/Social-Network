@@ -150,7 +150,7 @@
           <v-btn color="green darken-1" text @click="deleteDialog = false">
             Disagree
           </v-btn>
-          <v-btn color="green darken-1" text @click="deletePost">
+          <v-btn color="green darken-1" text @click="deletePost(post.id)">
             Agree
           </v-btn>
         </v-card-actions>
@@ -161,7 +161,7 @@
 
 <script>
 import Fof from '@/views/404/Index'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import io from 'socket.io-client'
 const ENDPOINT = 'localhost:6001'
@@ -182,6 +182,7 @@ export default {
   },
   computed: mapGetters(['currentUser', 'loggedIn']),
   methods: {
+    ...mapActions(['deletePost']),
     upload(){
       this.comment=''
     },
@@ -235,13 +236,13 @@ export default {
         response = null
       }
     },
-    async deletePost(){
-      let url = `/auth/user/post/${this.post.id}/delete`
+    async deletePost(postId){
       try{
-        const response = await axios.post(url)
+        const payload = { post_id: postId}
+        await this.deletePost(payload)
         this.$swal({
           icon: 'success',
-          text: response.data.message
+          text: 'Delete post successfully!'
         })
       } catch {
         this.$swal({

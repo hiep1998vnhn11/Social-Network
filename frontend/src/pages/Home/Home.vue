@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="8">
         <create-post></create-post>
-         <v-row cols="8" v-for="post in allPosts.data.data" :key="post.id">
+         <v-row cols="8" v-for="post in allPosts.data" :key="post.id">
       <v-col>
         <post-component :post="post"></post-component>
       </v-col>

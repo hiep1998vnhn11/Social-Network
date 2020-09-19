@@ -131,10 +131,18 @@ class ChatController extends AppBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getRoom()
+    public function getRoom(Request $request)
     {
-       return auth('api')->user()->room()->paginate(config('const.default_per_page'));
-        return config('const.default_per_page');
+        $searchKey = Arr::get($request->all(), 'search_key', null);
+        $data = auth('api')->user()->room();
+        
+        $data = $data->join('users', 'with_id', 'users.id')
+            ->select('message_rooms.*','users.url', 'users.avatar', 'users.name');
+        if($searchKey){
+            $data = $data->where('name', 'like', '%' . $searchKey . '%');
+        }
+        $data = $data->paginate(config('const.default_per_page'));
+        return $data;
     }
 
     public function getChatOnRoom(Room $room, Request $request)

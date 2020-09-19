@@ -14,6 +14,8 @@ import MyProfile from '@/pages/User/MyProfile'
 import History from '@/components/Navbar/History'
 import Test from '@/components/Test'
 import MessageComponent from '@/components/Message/MessageComponent'
+import MessageSetting from '@/pages/Message/MessageSetting'
+import NewMessage from '@/pages/Message/NewMessage'
 
 Vue.use(VueRouter)
 
@@ -42,7 +44,13 @@ Vue.use(VueRouter)
         requiresAuth: true
       }, children: [
         {
-          path:'with/:url', name: 'MessageUser', component: MessageComponent
+          path:'room/:room_id', name: 'MessageUser', component: MessageComponent
+        },
+        {
+          path:'setting', name: 'MessageSetting', component: MessageSetting
+        },
+        {
+          path: 'new', name: 'NewMessage', component: NewMessage
         }
       ]
     },
