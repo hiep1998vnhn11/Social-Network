@@ -53,24 +53,24 @@ Vue.component('vue-friendly-iframe', VueFriendlyIframe)
 axios.defaults.baseURL = 'http://dev.socialnetwork.api.com/api'
 
 router.beforeEach((to, from, next) => {
-  if(to.matched.some(record => record.meta.requiresAuth)){
-    if(!store.getters.loggedIn) { 
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.getters.loggedIn) {
       next({
-        name:'Login',
+        name: 'Login',
       })
     } else {
       next()
     }
-  } else if(to.matched.some(record => record.meta.requiresVisitor)){
-    if(store.getters.loggedIn) { 
+  } else if (to.matched.some(record => record.meta.requiresVisitor)) {
+    if (store.getters.loggedIn) {
       next({
-        name:'Profile',
+        name: 'Profile',
       })
     } else {
       next()
     }
   }
-   else {
+  else {
     next()
   }
 })

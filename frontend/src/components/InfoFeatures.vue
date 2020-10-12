@@ -12,17 +12,17 @@
 </template>
 
 <script>
-  export default {
-    name: 'SectionFeaturesAlt',
+export default {
+  name: "SectionFeaturesAlt",
 
-    data: () => ({
-      features: [
-        'Zero Installation',
-        'Easy Customization',
-        'User Friendly Design',
-        '24/7 Support Desk',
-        'SEO Optimized',
-      ],
-    }),
-  }
+  data: () => ({
+    features: [
+      "Zero Installation",
+      "Easy Customization",
+      "User Friendly Design",
+      "24/7 Support Desk",
+      "SEO Optimized",
+    ],
+  }),
+};
 </script>
